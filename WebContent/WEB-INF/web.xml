@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:web="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
+  <display-name>Archetype Created Web Application</display-name>
+  <!--
+	The DispatcherServlet is an actual Servlet (it inherits from the HttpServlet base class), 
+	and as such is declared in the web.xml of your web application. Requests that you want the DispatcherServlet
+	to handle will have to be mapped using a URL mapping in the same web.xml file. 
+	« on initialization of a DispatcherServlet, look for a file named [servlet-name]-servlet.xml in the 
+	WEB-INF directory of your web application and create the beans defined there.
+	« From the below configuration of DS -
+	WebApplicationContext check namespace-servlet.xml file from its Default loacation '/WEB-INF/{Spring-ServletName}-servlet.xml',
+	we can change the exact location of this configuration file as shown below.
+	-->
+	
+	<!--
+	String which is passed to the context instance (specified by contextClass) to indicate where context(s) can be found.
+	The string is potentially split up into multiple strings (using a comma as a delimiter) to support multiple contexts
+	-->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			/WEB-INF/Spring-servlet.xml
+		</param-value>
+		<param-value>classpath:/webApplicationContext/*.xml</param-value>
+	</context-param>
+	<servlet>
+		<servlet-name>Spring</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<!-- Try calling your controllers with a different extension (*.do for example - where * is the WildCard). 
+	*.do matches anything that ends in .do, for example, /foo.do, /foo/bar.do.
+	*.do | / -->
+	<servlet-mapping>
+		<servlet-name>Spring</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+	
+<!-- http://docs.spring.io/spring/docs/2.5.6/reference/mvc.html -->
+<!-- @Autowire or load time beans-object creation, we need to use this listener.
+this listener will activate when the bean object is creating and the required values will supply to it. 
+start up a Spring root application context via its ContextLoaderListener,
+and access it via its ServletContext attribute-->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+  <welcome-file-list>
+    <welcome-file>/signin2.jsp</welcome-file>
+  </welcome-file-list>
+  
+  <session-config>
+    <session-timeout>30</session-timeout>
+  </session-config>
+  
+  <error-page>
+    <error-code>403</error-code>
+    <location>/account-access-denied.jsp</location>
+  </error-page>
+</web-app>

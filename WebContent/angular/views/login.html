@@ -1,0 +1,73 @@
+<!-- define angular controller -->
+<legend class="form-label animated zoomIn">Sign in to Application</legend>
+<div class="form-container animated zoomIn"  data-ng-controller="loginController" >
+	
+	<form name="formName" role="form" data-ng-submit="formSubmit()">
+	
+		<!-- Redirected Message [Forgot password] - On login click close alert
+	- We've sent you an email with instructions on how to reset your password. -->
+	<!-- <div class="form-group"> -->
+		<div id='resentPassword'> </div>
+	<!-- </div> -->
+
+	<!-- Account does not exist -->
+		<div id='error' ></div>
+		<!--
+		<div class="form-group" 
+		ng-class="{ 'has-error': form.username.$dirty && form.username.$error.required }">
+			<label for="username">Username</label>
+			<input type="text" name="username" id="username" class="form-control" 
+			ng-model="vm.username" required />
+			<span ng-show="form.username.$dirty && form.username.$error.required" class="help-block">
+			Username is required</span>
+		</div>
+		-->
+		<div class="form-group">
+			<label for="email">Email</label>
+			<!-- ng-required="true" | required -->
+			<div class="error form-hint" 
+			data-ng-show="formName.email.$dirty && formName.email.$error.required" 
+			data-ng-cloak>{{"You can't leave this empty."}}
+			</div>
+			<!-- ng-model="email" -->
+			<div class="error form-hint" 
+			data-ng-show="formName.email.$dirty && formName.email.$error.email" 
+			data-ng-cloak>{{"The email address you provided isn't valid"}}</div>
+
+			<input type="email" class="form-control" id="email" name="email" placeholder="Enter Email Address" 
+			data-ng-class="(formName.email.$dirty && formName.email.$invalid) ? 'error' : ''"
+			data-ng-required="true" data-ng-model="email77" value="$scope.email77">
+		</div>
+
+		<div class="form-group">
+			
+			<!-- <div class="form-hint" style="color: white;font-size: 7pt;">
+			To conform with our Strong Password policy,
+			Use at least one letter, one numeral, one special character, and seven characters.
+			</div> -->
+			
+			<label for="password"><!-- class="btn btn-link label-link" -->
+			Password 
+			</label>
+			<a href="#forgotPassword" class="btn-link" style="float: right;">Forgot password?</a>
+			
+			<div class="error form-hint" 
+			data-ng-show="formName.password.$dirty && formName.password.$error.required" 
+			data-ng-cloak>{{"You can't leave this empty."}}
+			</div>
+			
+			<!-- data-ng-class="(formName.password.$dirty && formName.password.$invalid) ? 'error' : ''"  -->
+			<input type="password" class="form-control" 
+			id="password" name="password" placeholder="Enter Password" data-ng-required="true" data-ng-model="password">
+
+		</div>
+		<!-- Keep me logged in | REMEMBER ME -->
+		<!-- data-ng-disabled="formName.$invalid" attribute will disable if any of the field is invalid.-->
+		<button id='siginButton' type="submit" class="btn" data-ng-disabled="formName.$invalid">Sign In</button>
+		
+		<br><br><div class="form-group">
+		<!-- No account? Create one! | class="btn btn-link"-->
+			<div>New to Application? <a href="#register" class="btn-link"> Create an Account </a><br></div>
+		</div>
+	</form>
+</div>

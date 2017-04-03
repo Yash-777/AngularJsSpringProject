@@ -1,0 +1,260 @@
+
+// http://stackoverflow.com/a/31974242/5081877
+application.factory('Database', ['$http', function($http) {
+   function get(query, callback) {
+        return $http.get("getData.php", {params: {'query': query}}, {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
+            .then(function (response) {
+                console.log('Response Data : ', response.data);
+                callback(response.data);
+            })
+    }
+    function post( query, callback ) {
+        var targetRequestPath = 'http://localhost:8080/MyProject/Service/postReq';
+        var targetRequestParamsREQ = { 'query': query };
+        return $http({
+                method: 'POST',
+                url: targetRequestPath,
+                    headers: {'Content-Type': 'application/json'},
+                    data: targetRequestParamsREQ
+                }).then(function (response) {
+                    console.log('Response Data : ', response.data);
+                    callback( response.data );
+                })
+    }
+    return { get:get, post:post };
+}]);
+application.controller('RegistrationController', ['$scope', 'Database', function($scope, Database) {
+    Database.get("SELECT * FROM `group`", function(resp){
+           $scope.posts =  resp;
+           console.log($scope.posts);
+   });
+
+}]);
+
+/* JSON is a more lightweight plain-text alternative to XML which is also commonly used for client-server 
+ * communication in web applications. JSON is based on JavaScript syntax, but is supported in other programming 
+ * languages as well.*/
+
+Object.prototype.getKeyByValue = function( value ) {
+    for( var prop in this ) {
+        if( this.hasOwnProperty( prop ) ) {
+             if( this[ prop ] === value )
+                 return prop;
+        }
+    }
+}
+Object.prototype.getValueByKey = function( key ) {
+    for( var prop in this ) {
+        if( this.hasOwnProperty( prop ) ) {
+             if( prop === key )
+                 return this[ prop ];
+        }
+    }
+}
+
+var test = {
+   key1: 42,
+   key2: 'foo'
+};
+
+console.log("getKeyByValue : ", test.getKeyByValue( 42 ) );
+console.log("getValueByKey : ", test.getValueByKey( 'key2' ) );
+console.log("Normal With out prototype : ", test( 'key2' ) );
+
+angular.element(document.getElementById('page-content-wrapper')).scope().dashboardResultData
+ 
+angular.element('[data-ng-controller="dashboardResultController"]').scope().dashboardResultData
+Object {ScenarioName: "MyTest", PassedStepsCount: "2", FailedStepsCount: "1", TotalSteps: "3", StartDateTime: "----"…}
+
+angular.element('[data-ng-controller="dashboardResultController"]').scope().dashboardResultData.ScenarioName
+"MyTest"
+
+angular.element('[data-ng-controller="dashboardResultController"]').scope().dashboardResultData.Steps[0].Parameter
+
+=========================================
+
+INFO: Initializing ProtocolHandler ["http-bio-8080"]
+INFO: Initializing ProtocolHandler ["ajp-bio-8009"]
+ org.apache.catalina.LifecycleException: Failed to start component [StandardEngine[Catalina].StandardHost[localhost].StandardContext[/MySpringProject]]
+ org.apache.catalina.LifecycleException: Failed to start component [StandardServer[8005]]
+ 
+Mar 06, 2017 11:57:20 AM org.apache.coyote.AbstractProtocol start
+INFO: Starting ProtocolHandler ["http-bio-8080"]
+Mar 06, 2017 11:57:20 AM org.apache.coyote.AbstractProtocol start
+INFO: Starting ProtocolHandler ["ajp-bio-8009"]
+
+http://localhost:8080/AngularSpringProject/account/login.form
+
+As we accessing pages from controller we need to place jsp's at the location which we have specified to dispatcherservlet.
+
+https://eugenebichel.files.wordpress.com/2015/09/angularjs-modules.jpg
+
+https://www.slideshare.net/ThoughtWorks/angular-js-introduction-by-tania-gonzales
+
+
+AngularJS is a structural framework for dynamic web applications.
+
+// Already $scope is available so we no need to pass parameter explicitly.
+
+« https://scotch.io/tutorials/single-page-apps-with-angularjs-routing-and-templating
+
+# INJECTING PAGES INTO THE MAIN LAYOUT
+
+ng-view is an Angular directive that will include the template of the current route (/home, /about, or /contact) in the main layout file.
+In plain words, it takes the file we want based on the route and injects it into our main layout (index.html).
+We will add the ng-view code to our site in the div#main to tell Angular where to place our rendered pages.
+
+# Configure Routes and Views
+Since we are making a single page application and we don’t want any page refreshes, we’ll use Angular’s routing capabilities.
+
+Let’s look in our Angular file and add to our application. We will be using $routeProvider in Angular to handle our routing.
+This way, Angular will handle all of the magic required to go get a new file and inject it into our layout.
+
+=======================Prototypal Inheritance: A prototype is a working object instance. Objects inherit directly from other objects.
+
+Controllers & Multipe Controllers: https://docs.angularjs.org/api/ng/directive/ngController
+A controller is a set of JS function bound to scope.
+Data Binding : You can use it for dyanmic values to inject to an HTML Element {{ Expression }} | $scope.param.
+the bounded value can be accessable over that module{lowerCamelCase}, conroller[cmelcase].
+Keep you controller lean, by write code saperate and you can make that code injected as a dependency.
+
+The ng-controller directive tells Angular to instantiate the new controller object,
+and inject the nwe scope as a dependency. Which contains the business logic for the view purpose.
+Avoid using to manipulate the DOM.
+
+
+
+
+$Scope - with in the controller, $rootScope - module:
+$scope is an obejct tat refers to the app model, provides the execution context for expression.
+which is the glue b/w the controller and the view. you can attach the properties/function to
+scope to make them available to the view. any object or premitives that are added to the $scope are
+considered model properties.
+
+
+My underStanding about scope with java.
+Scope is class object{$} with user defined propertie names.
+
+Shearing Data Accross Controllers:
+
+==========================
+ApplicationDataBase
+
+
+
+
+hibernate5:
+<!-- .ClassNotFoundException: org.hibernate.cache.CacheProvider -->
+<!-- ClassNotFoundException: org.hibernate.engine.FilterDefinition -->
+<!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
+<dependency>
+    <groupId>org.hibernate</groupId>
+    <artifactId>hibernate-core</artifactId>
+    <version>5.2.8.Final</version>
+</dependency>
+
+<!-- Compile Dependencies (10) for Core Hibernate O/RM Functionality » 5.2.6.Final -->
+<!-- https://mvnrepository.com/artifact/org.hibernate.common/hibernate-commons-annotations -->
+<dependency>
+    <groupId>org.hibernate.common</groupId>
+    <artifactId>hibernate-commons-annotations</artifactId>
+    <version>5.0.1.Final</version>
+</dependency>
+	<!-- https://mvnrepository.com/artifact/org.jboss.logging/jboss-logging -->
+	<dependency>
+	    <groupId>org.jboss.logging</groupId>
+	    <artifactId>jboss-logging</artifactId>
+	    <version>3.3.0.Final</version>
+	    <scope>compile</scope>
+	</dependency>
+<!-- https://mvnrepository.com/artifact/org.hibernate.javax.persistence/hibernate-jpa-2.1-api -->
+<dependency>
+    <groupId>org.hibernate.javax.persistence</groupId>
+    <artifactId>hibernate-jpa-2.1-api</artifactId>
+    <version>1.0.0.Final</version>
+</dependency>
+
+	<!-- https://mvnrepository.com/artifact/org.apache.geronimo.specs/geronimo-jta_1.1_spec -->
+	<dependency>
+	    <groupId>org.apache.geronimo.specs</groupId>
+	    <artifactId>geronimo-jta_1.1_spec</artifactId>
+	    <version>1.1.1</version>
+	</dependency>
+	<!-- https://mvnrepository.com/artifact/antlr/antlr -->
+	<dependency>
+	    <groupId>antlr</groupId>
+	    <artifactId>antlr</artifactId>
+	    <version>2.7.7</version>
+	    <scope>compile</scope>
+	</dependency>
+	<!-- https://mvnrepository.com/artifact/com.fasterxml/classmate -->
+	<dependency>
+	    <groupId>com.fasterxml</groupId>
+	    <artifactId>classmate</artifactId>
+	    <version>1.3.3</version>
+	    <scope>compile</scope>
+	</dependency>
+	<!-- https://mvnrepository.com/artifact/dom4j/dom4j -->
+	<dependency>
+	    <groupId>dom4j</groupId>
+	    <artifactId>dom4j</artifactId>
+	    <version>1.6.1</version>
+	    <scope>compile</scope>
+	</dependency>
+		<!-- https://mvnrepository.com/artifact/xml-apis/xml-apis -->
+		<!-- <dependency>
+		    <groupId>xml-apis</groupId>
+		    <artifactId>xml-apis</artifactId>
+		    <version>xerces-2.7.1</version>
+		    <scope>compile</scope>
+		</dependency> -->
+	<!-- https://mvnrepository.com/artifact/org.javassist/javassist -->
+	<dependency>
+	    <groupId>org.javassist</groupId>
+	    <artifactId>javassist</artifactId>
+	    <version>3.21.0-GA</version>
+	</dependency>
+	<!-- https://mvnrepository.com/artifact/org.jboss/jandex -->
+	<dependency>
+	    <groupId>org.jboss</groupId>
+	    <artifactId>jandex</artifactId>
+	    <version>2.0.3.Final</version>
+	</dependency>
+	<!-- https://mvnrepository.com/artifact/javax.enterprise/cdi-api -->
+	<dependency>
+	    <groupId>javax.enterprise</groupId>
+	    <artifactId>cdi-api</artifactId>
+	    <version>1.1</version>
+	    <scope>compile</scope>
+	</dependency>
+		<!-- https://mvnrepository.com/artifact/org.jboss.spec.javax.interceptor/jboss-interceptors-api_1.1_spec -->
+		<dependency>
+		    <groupId>org.jboss.spec.javax.interceptor</groupId>
+		    <artifactId>jboss-interceptors-api_1.1_spec</artifactId>
+		    <version>1.0.1.Final</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/javax.annotation/jsr250-api -->
+		<dependency>
+		    <groupId>javax.annotation</groupId>
+		    <artifactId>jsr250-api</artifactId>
+		    <version>1.0</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/javax.el/el-api -->
+		<dependency>
+		    <groupId>javax.el</groupId>
+		    <artifactId>el-api</artifactId>
+		    <version>2.2</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/javax.inject/javax.inject -->
+		<dependency>
+		    <groupId>javax.inject</groupId>
+		    <artifactId>javax.inject</artifactId>
+		    <version>1</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.testng/testng -->
+		<!-- <dependency>
+		    <groupId>org.testng</groupId>
+		    <artifactId>testng</artifactId>
+		    <version>5.10</version>
+		</dependency> -->
+
