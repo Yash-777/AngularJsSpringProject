@@ -16,12 +16,43 @@ import com.github.dto.RegistrationDTO;
  */
 @Repository
 public class LoginDAO_Impl implements LoginDAO {
+	
+	public LoginDAO_Impl() {
+		System.out.println("LoginDAO_Impl :: Object Created ");
+	}
+	
+	private MongoFilesDAO_Impl mongoDao;
+	public MongoFilesDAO_Impl getMongoDao() {
+		return mongoDao;
+	}
+	public void setMongoDao(MongoFilesDAO_Impl mongoDao) {
+		System.out.println("Mongo Dao : "+mongoDao);
+		this.mongoDao = mongoDao;
+	}
+	
 	private JdbcTemplate jt;
 	
 	public JdbcTemplate getJt() {	return jt;	}
 	public void setJt(JdbcTemplate jt) {
-		System.out.println("Inside Setter : "+jt);
+		System.out.println("Jdbc Template : "+jt);
 		this.jt = jt;
+	}
+	
+	public String getUserName(LoginDTO loginDto){
+		
+		String query ="SELECT `USER_NAME` FROM `user` WHERE `EMAIL` ='"+loginDto.getEmail()+"' AND `PASSWORD` = '"+loginDto.getPassword()+"' ";
+		System.out.println("JT: "+jt);
+		try { // Incorrect result size: expected 1, actual 0 - For Incorrect Details
+			String username = jt.queryForObject(query, String.class);
+			if( username != null ) {
+				loginDto.toString();
+				loginDto.setUserName( username );
+				loginDto.toString();
+				return username;
+			}
+		} catch (org.springframework.dao.EmptyResultDataAccessException e) {
+		}
+		return "";
 	}
 	
 	/**

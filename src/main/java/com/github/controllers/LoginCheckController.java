@@ -8,6 +8,7 @@ import java.net.UnknownHostException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -23,30 +25,35 @@ import org.springframework.web.servlet.ModelAndView;
 import com.github.dao.LoginDAO_Impl;
 import com.github.dto.LoginDTO;
 import com.github.dto.RegistrationDTO;
+import com.github.service.MailService;
 
-// http://localhost:8080/AngularSpringProject/account/login.form
+// http://localhost:8080/AngularSpringProject/account/login
 @Controller
 @RequestMapping(value = "/account")
 public class LoginCheckController {
 
-	@Autowired  
-	private LoginDAO_Impl loginDao;
+	@Autowired private LoginDAO_Impl loginDao;
+	
+	@Autowired private MailService mailService;
 	
 	@RequestMapping(value = "/login", method = RequestMethod.GET )
 	public ModelAndView inputFrom( Model model ) {
 		System.out.println("GET... /login");
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("signinRoute"); //signinRoute | signin
+		mav.setViewName("signin"); //signinRoute | signin
 		return mav;
 	}
 	
 	@RequestMapping(value = "/logout", method = RequestMethod.GET )
-	public ModelAndView signOUT( Model model ) {
+	public String signOUT( Model model, HttpServletRequest req, HttpServletResponse resp ) {
 		System.out.println("GET... /logout");
 		
-		ModelAndView mav = new ModelAndView();
-		mav.setViewName("signinRoute"); //signinRoute | signin
-		return mav;
+		HttpSession session = req.getSession();
+		if( !session.isNew() ) {
+			session.removeAttribute("userName");
+			req.getSession().invalidate();
+		}
+		return "redirect:/account/login";
 	}
 	
 	/*@RequestMapping(value = "/member/{name}", method = RequestMethod.GET)
@@ -56,20 +63,22 @@ public class LoginCheckController {
     }*/
 	
 	@RequestMapping(value = "/userLogin", method = RequestMethod.POST )
-	public void inputFromData(@ModelAttribute("loginDto") LoginDTO loginDto,
+	public void inputFromData(@RequestBody String sb, @ModelAttribute("loginDto") LoginDTO loginDto,
 			HttpServletRequest request, HttpServletResponse response ) throws IOException {
 		setAccessControlHeaders( response );
+		
 		
 		/*Using writer to send a message to requested resource*/
 		PrintWriter writer = response.getWriter();
 		System.out.println("POST...  inputFromData");
-		StringBuilder sb = new StringBuilder();
+		/*StringBuilder sb = new StringBuilder();
 		BufferedReader br = request.getReader();
 		String str = null;
 		while ((str = br.readLine()) != null) {
 			sb.append(str);
-		} // SB: {"username":"yashwanth.merugu@gmail.com","password":"Yash@777"}
+		} // SB: {"username":"yashwanth.merugu@gmail.com","password":"Yash@777"}*/
 		System.out.println("SB : "+sb);
+		
 		JSONObject jObj = null;
 		String userName = null, password = null;
 		String returnMessage = "error";
@@ -84,6 +93,8 @@ public class LoginCheckController {
 			
 			if( loginDao.loginChectk(loginDto) /*password.equals("Yash@777")*/ ) {
 				request.getSession().setAttribute("userName", loginDto.getUserName() );
+				request.getSession().setAttribute("displayName", "Yash" );
+				request.getSession().setAttribute("email",loginDto.getEmail());
 				returnMessage = "valid";
 			}
 		} catch (JSONException e) {
@@ -157,9 +168,8 @@ public class LoginCheckController {
 			jObj = new JSONObject(sb.toString());
 			email = jObj.getString("email");
 			
-			//loginDto.setEmail(email);
-			
 			if( loginDao.forgotPasswordToken( email ) /*email.equals("yashwanth.merugu@gmail.com")*/ ) {
+				mailService.sendMail("yashwanth.merugu@gmail.com", "yashwanth.merugu@gmail.com:Yash M", "Git Subject : Test Mail" );
 				returnMessage = "valid";
 			}
 		} catch (JSONException e) {

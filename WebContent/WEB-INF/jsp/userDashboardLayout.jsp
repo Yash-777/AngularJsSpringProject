@@ -6,72 +6,68 @@
 
 <!-- CDN's URL : https://www.bootstrapcdn.com/ -->
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <title>Defects</title>
 
 <link rel="stylesheet" href="${pageContext.servletContext.contextPath}/css/style.css" type="text/css">
-<link rel="stylesheet" href="${pageContext.servletContext.contextPath}/css/bootstrapModified.css" type="text/css">
-<!-- <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
 <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.9/angular.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular-route.js"></script>
+	
+<script type="text/javascript" src="${pageContext.servletContext.contextPath}/angular/angularMainPage.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="${pageContext.servletContext.contextPath}/js/custom.js"></script>
-
-<script type="text/javascript">
-var loginRouteProvider = angular.module('loginModule', ['ngRoute']).config( function($routeProvider) {
-	$routeProvider
-
-	// route for the home page
-	.when('/login', {
-	templateUrl : '${pageContext.servletContext.contextPath}/angular/views/login.html',
-	controller  : 'loginController'
-	})
-
-	// route for the about page
-	.when('/forgotPassword', {
-	templateUrl : '${pageContext.servletContext.contextPath}/angular/views/forgotPassword.html',
-	controller  : 'forgotPasswordController'
-	})
-
-	// route for the contact page
-	.when('/register', {
-	templateUrl : '${pageContext.servletContext.contextPath}/angular/views/register.html',
-	controller  : 'registerController'
-	})
-	.otherwise({ redirectTo: '/login' });
-});
-</script>
 </head>
 <body>
 <header class="white-bg">
+
 <!-- Start Logo and User icon part -->
 <div class="top-header">   
  <div class="container-fluid">
    <div class="row">
      <div class="col-md-10 col-xs-12">
-    <img src="${pageContext.servletContext.contextPath}/images/spring.png" alt="Spring" style="width: 32px;">
+    <img src="${pageContext.servletContext.contextPath}/images/logo.png">
+    <div style="width: 130px;">
+    <!-- https://www.w3schools.com/js/js_timing.asp
+    This example executes a function called "myTimer" once every second (like a digital watch). -->
+<!-- <button onclick="clearTimeout(myVar)">Stop it</button>
+<p id="demo"></p>
+<script>
+var myVar = setInterval(myTimer, 1000);
+
+function myTimer() {
+    var d = new Date();
+    document.getElementById("demo").innerHTML = d.toLocaleTimeString();
+}
+</script> -->
+    </div>
     </div>
      <div class="col-md-2 col-xs-12 pull-right">
+
     <ul class="nav navbar-right">
          <li class="dropdown">
              <a href="#" class="dropdown-toggle profile-name" data-toggle="dropdown" aria-expanded="false">
              <i class="fa fa-user"></i>${sessionScope.userName}<b class="caret" style="color:#333;"></b></a>
              <%-- <core:out value="${username}"></core:out> --%>
              <ul class="dropdown-menu animated flipInX">
-                 <li>
-                     <a><i class="fa"><B>IP : <core:out value="${IP}"/> </B></i></a>
-                 </li>
-                 <li class="divider"></li>
-                 <li><!-- class - fa-gear[setting symbol] fa-power-off[log out symbol] -->
-                     <a href="account-details.html"><i class="fa fa-fw fa-gear"></i>Settings</a>
-                 </li>
-                
-                 <li>
-                     <a href="${pageContext.servletContext.contextPath}/account/logout">
-                     <i class="fa fa-fw fa-power-off"></i>Sign out</a>
-                 </li>
+               <li>
+                   <a><i class="fa"><B>IP : <core:out value="${IP}"/> </B></i></a>
+               </li>
+               
+               <li class="divider"></li>
+               
+               <li> <a href="#/profile"><i class="fa fa-fw fa-user-o"></i> Profile</a> </li>
+               <li> <a href="#/settings"><i class="fa fa-fw fa-gear"></i> Settings</a> </li>
+               <li> <a href="${pageContext.servletContext.contextPath}/account/logout">
+                   <i class="fa fa-fw fa-power-off"></i>Sign out</a>
+               </li>
              </ul>
          </li>
      </ul>
@@ -79,13 +75,28 @@ var loginRouteProvider = angular.module('loginModule', ['ngRoute']).config( func
     </div>
   </div>
 </div>
-<!-- End Logo and User icon part --> 
+<!-- End Logo and User icon part -->
 </header>
+
 <div data-ng-app="userModule">
 
-<!-- defining angular app for the HTML Element -->
-<div class="main-container" >
+<!-- Start wrapper -->
 
+<div id="wrapper"> 
+
+	<!-- Side Bar Wrapper -->
+	<div id="sidebar-wrapper" class="side-menu">
+		<ul class="sidebar-nav nav-stacked" id="menu">
+			<li data-ng-class="{'active':(activetab == '/dashboard')}"><a href="#/dashboard"> <span class="fa-stack fa-lg pull-left">
+				<i class="fa fa-dashboard fa-stack-1x "></i></span> Dashboard</a>
+			</li>
+			<li data-ng-class="{'active':(activetab == '/support')}"><a href="#/support"><span class="fa-stack fa-lg pull-left">
+				<i class="fa fa-support fa-stack-1x "></i></span> Support</a>
+			</li>
+		</ul>
+	</div>
+	<!-- /Side Bar Wrapper --> 
+  
 	<!-- angular template - this is where content will be injected -->
 	<div data-ng-view></div>
 	

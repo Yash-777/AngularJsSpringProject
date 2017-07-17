@@ -1,0 +1,44 @@
+/*
+<div class="label password-count"
+data-ng-class="password.length > passwordLength ? 'label-success' : 'label-danger'" 
+			data-ng-cloak>{{ passwordModel | passwordCountFilter:passwordLength }}</div>
+*/
+.password-count {
+	float: right;
+	position: relative;
+	bottom: 24px;
+	right: 10px;
+}
+
+.btn .label {
+  position: relative;
+  top: -1px;
+}
+.label-success {
+  background-color: #5cb85c;
+}
+.label-success[href]:hover,
+.label-success[href]:focus {
+  background-color: #449d44;
+}
+.label-info {
+  background-color: #5bc0de;
+}
+.label-info[href]:hover,
+.label-info[href]:focus {
+  background-color: #31b0d5;
+}
+.label-warning {
+  background-color: #f0ad4e;
+}
+.label-warning[href]:hover,
+.label-warning[href]:focus {
+  background-color: #ec971f;
+}
+.label-danger {
+  background-color: #d9534f;
+}
+.label-danger[href]:hover,
+.label-danger[href]:focus {
+  background-color: #c9302c;
+}

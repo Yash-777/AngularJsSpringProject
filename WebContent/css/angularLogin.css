@@ -1,3 +1,81 @@
+/*
+http://sites.simbla.com/b1543e97-5fab-eeb2-56cd-9bc1cacfe9cb/#Contact
+https://developers.google.com/fonts/docs/getting_started
+
+You can start using the Google Fonts API in just two steps:
+	1. <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Font+Name">
+	2. .css-selector {  font-family: 'Font Name', serif; font-size: 48px;  text-shadow: 4px 4px 4px #aaa;  }
+	
+Google Font Directory « https://fonts.google.com/
+*/
+/* https://www.w3.org/TR/REC-CSS1/#url */
+@import url(//fonts.googleapis.com/css?family=Open+Sans);
+@import url(//fonts.googleapis.com/css?family=Tangerine);
+@import url(//fonts.googleapis.com/css?family=Dancing+Script);
+
+/* <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css"> */
+@import url(https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css);
+@import url(https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css);
+
+@import url(https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css);
+@import url(https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css);
+
+/* @font-face {
+  font-family: 'Open Sans';
+  font-weight: 300;
+  font-style: normal;
+} */
+
+/*
+text-transform: uppercase;
+
+Main :
+.panel.panel-login
+h2.form-label
+#formName, .form-hint
+*/
+body {
+	background: white;
+	margin: 0;
+	padding: 0;
+	font-family: 'Open Sans', serif;
+	/* font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,
+	"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol"; */
+	font-weight:100;
+	font-size:14px;
+	/* background-color: #F9F9F9; */
+}
+
+h2.form-label {
+	text-align:center;
+	font-size: 20pt;
+	padding: 0 40px;
+	border-bottom: 3px solid #4398b1 !important;
+	
+	margin: 20px;
+	margin-bottom: 5px;
+}
+
+
+/* - To hide scroll bar for single page
+-webkit-box-sizing: border-box;
+-moz-box-sizing: border-box;
+box-sizing: border-box;
+*/
+.icon-signin{
+	font-family: FontAwesome; font-style: normal;
+}
+
+a {
+	color: #0366D6 !important;
+	text-decoration: none !important;
+	background-color: transparent !important;
+}
+
+
 [ng\:cloak],
 [ng-cloak],
 [data-ng-cloak],
@@ -7,63 +85,53 @@
 	display: none !important;
 }
 
-/* .ng-invalid {
-	border-color: red;
-	outline-color: red;
-} */
-a{
-	color: #0366D6;
-	text-decoration: none;
-}
-.ng-valid {
-	border-color: #1395f0;
-	outline-color: #1395f0;
+/* Panel CSS */
+.container {
+	width: 500px !important;
+	padding-top: 42px;
+	left: 50%;
+	/* bring your own prefixes */
+	/* transform: translate(-50%, -50%); */
 }
 
-#siginButton{
-	color: #fff;
-	background-color: #1395f0;
-	border-color: #f2f2f2;
-	width: 40%;
-}
-#forgetButton{
-	color: #fff;
-	background-color: #1395f0;
-	border-color: #f2f2f2;
-	
-	text-align: center;
-}
-#btn-primary{
-	color: #fff;
-	background-color: #1395f0;
-	border-color: #f2f2f2;
-}
-.form-container form > button {
-	margin-right: 30px;
-	float: right;
+.panel-login .form-group {
+	padding: 0 20px;
+	background-color: #48636f82 !important;
 }
 
-.form-hint {
-	font-size: 8pt;
-	line-height: 9pt;
-	margin: -5px auto 5px;
-	color: #999;
+input {
+	height: 40px;
+	border: 0 !important;
+	box-shadow: none;
+	border-bottom: 1px solid #7199aa;
+	border-radius: 7px;
+	font-size: 13px;
+	padding: 6px 0px;
+	background-color: #48636f82 !important;
 }
 
-.form-hint.error {
-	color: #C00;
-	font-weight: bold;
-	font-size: 8pt;
+.panel.panel-login {
+	background: #f5f5f5 !important; /* rgba(78, 106, 118, 0.4) */
+	background: rgba(162, 193, 205, 0.99) none repeat scroll 0 !important;
+	/* -webkit-box-shadow: 0px 0px 49px 14px rgba(123, 165, 184, 0.46) !important;
+	-moz-box-shadow: 0px 0px 49px 14px rgba(123, 165, 184, 0.46) !important;
+	box-shadow: 0px 0px 49px 14px rgba(123, 165, 184, 0.46) !important; */
 }
-
-body {
-	background: white;
-	margin: 0;
-	padding: 0;
-	font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
-	background-color: #F9F9F9;
+.panel-body {
+	padding: 20px !important;
+	border-radius: 30px;
 }
+.panel {
+	border-radius: 10px !important;
+}
+.localLinks {
+	clear: both;
+	display: table;
+	content: " ";
+}
+/* End of Panel CSS */
 
+/* JSP - Angular Route Main tag */
 .main-container {
 	display: table;
 	width: 400px;
@@ -74,7 +142,46 @@ body {
 	right: 0;
 	margin: auto;
 }
+#formName {
+	/* display: inline-block;
+	padding-left: 36px; */
+}
+.form-hint {
+	font-size: 7pt;
+	line-height: 9pt;
+	margin: -5px auto 5px;
+	color: #191717; /* #d9edf7; */
+}
+.form-control.error { /* .ng-invalid */
+	border-color: #f96706 !important;
+}
+.form-hint.error {
+	color: #f96706;/* #f7761f; */
+	font-weight: bold;
+	font-size: 8pt;
+}
 
+.ng-valid {
+	border-color: skyblue !important;
+	outline-color: skyblue !important;
+}
+
+.alert-danger {
+	color: #a94442;
+	background-color: #c76e6e;
+	border-color: #ebccd1;
+}
+.alert {
+	padding: 15px;
+	border: 1px solid transparent;
+	border-radius: 4px;
+	
+	height: 20px;
+	text-align: center;
+	line-height: 0;
+}
+
+/* Login.html - <div class="form-container animated zoomIn"  data-ng-controller="loginController" > Box Model Login Page View */
 .form-container {
 	position: relative;
 	bottom: 0;
@@ -86,82 +193,29 @@ body {
 	padding: 0 15px;
 }
 
-legend.form-label {
-	font-size: 24pt;
-	padding: 0 15px;
-}
-
-.form-control.error {
-	border-color: red;
-}
-
-.password-count {
+.form-container form > button {
+	margin-right: 30px;
 	float: right;
-	position: relative;
-	bottom: 24px;
-	right: 10px;
 }
 
-.strength-meter {
-	position: relative;
-	height: 3px;
-	background: #DDD;
-	margin: 10px auto 20px;
-	border-radius: 3px;
-}
-
-.strength-meter:before,
-.strength-meter:after {
-	content: '';
-	height: inherit;
-	background: transparent;
-	display: block;
-	border-color: #FFF;
-	border-style: solid;
-	border-width: 0 5px 0 5px;
-	position: absolute;
-	width: 80px;
-	z-index: 10;
-}
-
-.strength-meter:before {
-	left: 70px;
-}
-
-.strength-meter:after {
-	right: 70px;
-}
-
-.strength-meter-fill {
-	background: transparent;
-	height: inherit;
-	position: absolute;
-	width: 0;
-	border-radius: inherit;
-	transition: width 0.5s ease-in-out, background 0.25s;
-}
-
-.strength-meter-fill[data-strength='0'] {
-	background: darkred;
-	width: 20%;
-}
-
-.strength-meter-fill[data-strength='1'] {
-	background: orangered;
+#siginButton, #forgotButton, #btn-primary {
+	color: #fff !important;
+	background-color: #1395f0;
+	border-color: #f2f2f2;
 	width: 40%;
+	text-align: center;
+	border-radius: 7px !important;
+	
+	margin-top: 7px;
 }
-
-.strength-meter-fill[data-strength='2'] {
-	background: orange;
-	width: 60%;
+#forgotButton {
+	width: 100% !important;
 }
-
-.strength-meter-fill[data-strength='3'] {
-	background: yellowgreen;
-	width: 80%;
+#forgotPassword {
+position: relative;
+top: -27px; float: right;
+padding-right: 16px;
 }
-
-.strength-meter-fill[data-strength='4'] {
-	background: green;
-	width: 100%;
+.input-forgotPassword-padding {
+	padding-right: 170px !important;
 }
