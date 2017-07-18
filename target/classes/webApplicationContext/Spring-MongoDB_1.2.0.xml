@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+	
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-3.0.xsd
+	http://www.springframework.org/schema/data/mongo 
+	http://www.springframework.org/schema/data/mongo/spring-mongo-1.5.xsd
+	">
+	<!-- Spring data mongodb « 1.2.0.RELEASE [ mongo-java-driver « 2.11.0 ]-->
+	<context:annotation-config />
+
+	<import resource="ReadProperties.xml" />
+	
+	<mongo:mongo host="${mongoDBHost}" port="${mongoDBPort}" id="mongo" />
+	<bean id="mongoCredientials" class="org.springframework.data.authentication.UserCredentials">
+		<constructor-arg name="username" value="${mongoDBUserName}"/>
+		<constructor-arg name="password" value="${mongoDBPassword}"/>
+	</bean>
+	<bean id="mongoDbFactory" class="org.springframework.data.mongodb.core.SimpleMongoDbFactory">
+		<constructor-arg name="mongo" ref="mongo"/>
+		<constructor-arg name="databaseName" value="${mongoDBName}"/>
+		<constructor-arg name="credentials" ref="mongoCredientials"/>
+	</bean>
+	<!-- mongoConverter, which converts between Java and MongoDB types. -->
+	<mongo:mapping-converter id="mappingConverter" db-factory-ref="mongoDbFactory" />
+
+	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+		<constructor-arg name="mongoDbFactory" ref="mongoDbFactory"/>
+		<constructor-arg name="mongoConverter" ref="mappingConverter"/>
+	</bean>
+	<!-- Define MongoDB GridFS Template -->
+	<bean id="gridFsTemplate" class="org.springframework.data.mongodb.gridfs.GridFsTemplate">
+		<constructor-arg name="dbFactory" ref="mongoDbFactory"/>
+		<constructor-arg name="converter" ref="mappingConverter"/>
+		<constructor-arg name="bucket" value="${mongoDB_BucketName}"/>
+	</bean>
+
+	<bean id="mongoDao" class="com.github.dao.MongoFilesDAO_Impl">
+		<property name="collectionName" value="${mongoDB_Collection}"/>
+		<property name="mongoTemplate" ref="mongoTemplate"/>
+	</bean>
+	<bean id="mongoGridFSDao" class="com.github.dao.GridFSDBFileDaoImpl" parent="mongoDao">
+		<!-- Used @Autowore <property name="gridFsTemplate" ref="gridFsTemplate"/> -->
+	</bean>
+	
+	<bean class="org.springframework.data.mongodb.core.MongoExceptionTranslator"/>
+
+
+</beans>

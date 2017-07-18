@@ -14,7 +14,7 @@
 	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
 	
 	<link rel="stylesheet" type="text/css" href="${pageContext.servletContext.contextPath}/css/angularLogin.css">
-	
+	<link rel="stylesheet" type="text/css" href="${pageContext.servletContext.contextPath}/css/confirmPassword.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
 	
 <script type="text/javascript">

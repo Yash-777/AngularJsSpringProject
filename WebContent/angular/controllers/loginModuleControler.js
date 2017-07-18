@@ -2,19 +2,19 @@
  * (function (angular) { ... })(window.angular);
  * (function () { ... })();
  * */
-
-(function (angular) { 
+/*global angular - ng */
+(function (ng) { 
 	
 	'use strict';
 	
-	/* https://docs.angularjs.org/error/$injector/nomod?p0=loginModule
-	 * create the module and naming it as 'loginModule'
+	/* https://docs.angularjs.org/error/$injector/nomod?p0=myModule
+	 * create the module and naming it as 'myModule'
 	 * var myModule = angular.module('loginModule', []);
 	 * 
 	 * we are accessing an already created module
 	 * var myModule = angular.module('loginModule');
 	 * */
-	var myModule = angular.module('loginModule');
+	var myModule = ng.module('loginModule');
 	
 	/* create the controller with name 'loginController'
 	 * and loginControllerFun is controllers main function name.
@@ -23,17 +23,30 @@
 	 * 1) .controller('loginController', ['$scope','$window', loginControllerFun]);
 	 * 2) Predefined Object « loginController.$inject - ['$scope', '$window'];
 	 * */
+	myModule.controller('loadScript', ['$scope', loadScriptFun]);
 	
 	// https://docs.angularjs.org/error/$injector/unpr?p0=$scopeProvider%20%3C-%20$scope%20%3C-%20passwordCountFilter
-	myModule.controller('loginController', ['$rootScope', '$scope','$http', '$window', loginControllerFun]);
+	myModule.controller('loginController',
+			['$rootScope', '$scope','$http', '$window', 'USERCONSTANTS', '$controller', loginControllerFun]);
 	
-	myModule.controller('registerController', ['$scope','$http', '$window', '$location', registerControllerFun]);
+	myModule.controller('registerController',
+			['$scope','$http', '$window', '$location', registerControllerFun]);
 	
-	myModule.controller('forgotPasswordController', ['$rootScope', '$scope','$http', '$location', forgotPasswordControllerFun]);
+	myModule.controller('forgotPasswordController',
+			['$rootScope', '$scope','$http', '$location', forgotPasswordControllerFun]);
 	
-	function loginControllerFun($rootScope, $scope, $http, $window) {
+	/* Controller call form one to another
+	 * https://stackoverflow.com/a/25417210/5081877
+	 * https://stackoverflow.com/a/31469444/5081877
+	 * */
+	function loginControllerFun($rootScope, $scope, $http, $window, USERCONSTANTS, $controller) {
 		
-		/*$scope.loadScript('http://localhost:8080/MyAngularSpringProject/js/file.js', 'text/javascript', 'utf-8');*/
+		var testCtrl1ViewModel = $scope.$new();
+		//You need to supply a scope while instantiating. Provide the scope, you can also do 
+		//$scope.$new(true) in order to create an isolated scope.
+		//In this case it is the child scope of this scope.
+		$controller('loadScript',{$scope : testCtrl1ViewModel });
+		testCtrl1ViewModel.loadScript(USERCONSTANTS.USERS_DOMAIN+'/js/custom.js');
 		
 		console.log('loginController : RootScope Vlaue = ', $rootScope.forgotMessage);
 		
@@ -45,7 +58,6 @@
 			$('#resentPassword').show();
 		}
 		$scope.formSubmit = function () {
-			/*$rootScope.forgotMessage =  '';*/
 			console.log('loginController formSubmit1 : RootScope Vlaue = ', $rootScope.forgotMessage);
 			
 			if( $rootScope.forgotMessage != null && $rootScope.forgotMessage != 'undefined' && $rootScope.forgotMessage == 'success' ) {
@@ -64,7 +76,7 @@
 			var username = $scope.email77;
 			var password = $scope.password;
 			console.log("User: ", username, " Pass: ", password);
-			var targetRequestPath = '../account/userLogin.form';
+			var targetRequestPath = '../account/userLogin'; // SpringController
 			var targetRequestParams = { 'username': username, 'password': password };
 			var isAuthenticated = false;
 			$http({
@@ -80,7 +92,7 @@
 					/* $scope.error = ''; $scope.email77 = ''; $scope.password = ''; */
 					console.log("Authentication Status : Pass « ", isAuthenticated);
 					
-					$window.location.href = '../account/loginSucess.form';
+					$window.location.href = '../account/loginSucess'; // SpringController
 				} else {
 					$scope.password = '';
 					console.log("Authentication Status : Fail « ", isAuthenticated);
@@ -99,8 +111,6 @@
 	}
 	function registerControllerFun($scope, $http, $window, $location) {
 		
-		/*$scope.loadScript('http://localhost:8080/DemoAngularJs/js/fileuploadstyle.js', 'text/javascript', 'utf-8');*/
-		
 		console.log('registerControllerFun');
 		$scope.formSubmit = function () {
 			
@@ -108,7 +118,7 @@
 			,firstName = $scope.firstName, lastName = $scope.lastName;
 			console.log("User: ", username, " Pass: ", password, " Email: ", email,
 					" F: ", firstName, " L: ", lastName);
-			var targetRequestPath = '../account/register';
+			var targetRequestPath = '../account/register'; // SpringController
 			var targetRequestParamsREQ = 
 			{ 'username': username, 'password': password, 'email' : email, 'firstName': firstName, 'lastName': lastName };
 			var isAuthenticated = false;
@@ -151,7 +161,7 @@
 		$scope.formSubmit = function () {
 			var email = $scope.email77;
 			console.log("forgotPasswordControllerFun « User: ", email);
-			var targetRequestPath = '../account/forgot';
+			var targetRequestPath = '../account/forgot'; // SpringController
 			var targetRequestParams = { 'email': email };
 			var isAuthenticated = false;
 			$http({
@@ -190,6 +200,30 @@
 			}).error(function(data){
 				console.log('Error message. ', data);
 			});
+		};
+	}
+	
+	function loadScriptFun( $scope ) {
+		$scope.loadScript = function(url, type, charset) {
+			console.log('$scope.loadScript ===== Function called.')
+			if (type===undefined) type = 'text/javascript';
+			if (url) {
+				var script = document.querySelector("script[src*='"+url+"']");
+				if (!script) {
+					var heads = document.getElementsByTagName("head");
+					if (heads && heads.length) {
+						var head = heads[0];
+						if (head) {
+							script = document.createElement('script');
+							script.setAttribute('src', url);
+							script.setAttribute('type', type);
+							if (charset) script.setAttribute('charset', charset);
+							head.appendChild(script);
+						}
+					}
+				}
+				return script;
+			}
 		};
 	}
 })(window.angular);

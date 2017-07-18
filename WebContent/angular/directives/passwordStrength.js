@@ -1,11 +1,11 @@
 /*passwordStrength.js*/
 var strength = angular.module('loginModule');
 
-var passwordLength = 7;
 strength.factory('myfactory', [function() {
 	return {
 		score: function() {
-			var score = 0, value = arguments[0];
+			//console.log('arguments List : ', arguments);
+			var score = 0, value = arguments[0], passwordLength = arguments[1];
 			var containsLetter = /[a-zA-Z]/.test(value), containsDigit = /\d/.test(value), containsSpecial = /[^a-zA-Z\d]/.test(value);
 			var containsAll = containsLetter && containsDigit && containsSpecial;
 			
@@ -25,33 +25,41 @@ strength.factory('myfactory', [function() {
 				}
 				if(value.length >= passwordLength ) score += 1;
 			}
-			console.log('Factory Arguments : ', value, " « Score : ", score);
+			/*console.log('Factory Arguments : ', value, " « Score : ", score);*/
 			return score;
 		}
 	};
 }])
 
-.directive('okPasswordDirective', ['myfactory', function(myfactory) {
+.directive('okPasswordDirective', ['myfactory', 'USERCONSTANTS', function(myfactory, USERCONSTANTS) {
 	return {
 		// restrict to only attribute and class [AC]
 		restrict: 'AC',
-
+		priority: 2000,
 		// use the NgModelController
 		require: 'ngModel',
-
+		
 		// add the NgModelController as a dependency to your link function
-		link: function($scope, $element, $attrs, ngModelCtrl) {
-			$element.on('blur change keydown', function(evt) {
+		link: function($scope, $element, $attrs, ngPasswordModel) {
+			console.log('Directive - USERCONSTANTS.PASSWORD_LENGTH : ', USERCONSTANTS.PASSWORD_LENGTH);
+			
+			$element.on('blur change keydown', function( evt ) {
 				$scope.$evalAsync(function($scope) {
-					// update the $scope.password with the element's value
 					var pwd = $scope.password = $element.val();
+					// update the $scope.password with the element's value
 					
-					// resolve password strength score using zxcvbn service
-					$scope.loginModule = pwd ? (pwd.length > passwordLength && myfactory.score(pwd) || 0) : null;
-
-					// define the validity criterion for okPassword constraint
-					ngModelCtrl.$setValidity('okPassword', $scope.loginModule > 3);
+					/*Password Strength Meter Conditions:
+						valid password must be more than 7 characters
+						Factory score must have a minimum score of 3. [Letter, Digit, Special Char, CharLength > 7]*/
+					$scope.myModulePasswordMeter = pwd ? (pwd.length > USERCONSTANTS.PASSWORD_LENGTH 
+							&& myfactory.score(pwd, USERCONSTANTS.PASSWORD_LENGTH) || 0) : null;
+					ngPasswordModel.$setValidity('okPasswordController', $scope.myModulePasswordMeter > 3);
 				});
+				if( ngPasswordModel.$valid ) {
+					$scope.passwordVal = ngPasswordModel.$viewValue;
+					console.log('Updated Val : ', $scope.passwordVal);
+					$scope.updatePass();
+				}
 			});
 		}
 	};

@@ -1,26 +1,14 @@
-<div class="animated bounceIn">
-<div class="panel panel-login">
-<div class="panel-body">
-
-<!-- define angular controller -->
 <h2 class="form-label">Sign Up</h2>
 <div class="form-container" data-ng-controller="registerController" >
 	<form name="registerForm" role="form" data-ng-submit="formSubmit()">
-		<div class="form-group">
-			<div id='error' ></div>
-		</div>
 		<div class="form-group"><!-- Display Name -->
 			<div class="row">
-				<!-- <div class="col-md-12 col-xs-12">
-					<label for="username">Name</label>
-				</div> -->
 				<!--  
 				The Bootstrap grid system has four classes: xs (phones), sm (tablets), md (desktops), and lg (larger desktops).
 				The classes can be combined to create more dynamic and flexible layouts. -->
 				<div class="col-md-12 col-xs-12">
 				<div class="row inner">
 				
-					<!-- ng-required="true" | required {.col-md-6 - width 50%} -->
 					<div class="col-md-6 col-sm-6 col-xs-6  left">
 					<div class="error form-hint" 
 					data-ng-show="registerForm.firstname.$dirty && registerForm.firstname.$error.required" 
@@ -45,9 +33,7 @@
 			</div>
 		</div>
 		
-		<div class="form-group"><!-- Display Name -->
-			<!-- <label for="username">User Name</label> -->
-			<!-- ng-required="true" | required -->
+		<div class="form-group">
 			<div class="error form-hint" 
 			data-ng-show="registerForm.username.$dirty && registerForm.username.$error.required" 
 			data-ng-cloak>{{"This field is required."}}
@@ -59,13 +45,10 @@
 		</div>
 		
 		<div class="form-group">
-			<!-- <label for="email">Email</label> -->
-			<!-- ng-required="true" | required -->
 			<div class="error form-hint" 
 			data-ng-show="registerForm.email.$dirty && registerForm.email.$error.required" 
 			data-ng-cloak>{{"You can't leave this empty."}}
 			</div>
-			<!-- ng-model="email" | The email address you provided isn't valid | Email is invalid. -->
 			<div class="error form-hint" 
 			data-ng-show="registerForm.email.$dirty && registerForm.email.$error.email" 
 			data-ng-cloak>{{"The email address you provided isn't valid"}}</div>
@@ -76,14 +59,11 @@
 		</div>
 
 		<div class="form-group">
-			<!-- <label for="password">Password</label> -->
-
 			<div class="form-hint">
 			To conform with our Strong Password policy,
 			Use at least one letter, one numeral, one special character, and seven characters.
 			</div>
 			
-			<!-- Class « ok-passwordDirective Attribute « data-ok-password-directive -->
 			<input type="text" class="form-control" data-ok-password-directive
 			id="password" name="password" placeholder="Password" data-ng-required="true" 
 			data-ng-class="(registerForm.password.$dirty && registerForm.confirm.$dirty 
@@ -101,7 +81,6 @@
 		</div>
 
 		<div class="form-group">
-			<!-- <label for="ConfirmPassowrd">Confirm Password</label> --><!-- Reenter password -->
 			<div class="error form-hint" 
 			data-ng-show="registerForm.confirm.$dirty && !registerForm.confirm.$empty && registerForm.confirm.$error.required" 
 			data-ng-cloak>{{"You can't leave this empty."}}
@@ -110,12 +89,12 @@
 			data-ng-show="registerForm.confirm.$dirty && registerForm.confirm.$invalid && !registerForm.confirm.$error.required" 
 			data-ng-cloak>{{"These passwords don't match. Try again?"}}</div>
 
-			<!-- https://stackoverflow.com/questions/40649773/angular-js-confirm-password-message-is-already-displaying -->
 			<div class="error form-hint" data-ng-show="
 			( registerForm.confirm.$dirty && registerForm.confirm.$valid && !registerForm.confirm.$invalid) && 
 			( registerForm.password.$modelValue != registerForm.confirm.$modelValue )" data-ng-cloak>
 			{{'Password mismatch'}}
 			</div>
+			
 			<!-- Enter to Confirm password | Enter for Password confirmation -->
 			<input type="text" class="form-control" id="confirmedID" name="confirm"
 			placeholder="Password confirmation" 
@@ -123,7 +102,7 @@
 			data-ng-class="(registerForm.confirm.$dirty &&
 			( registerForm.confirm.$invalid || 
 			( registerForm.password.$modelValue == registerForm.confirm.$modelValue ) ) ) ? 'error' : ''" 
-			data-compare-to="registerForm.password" ><!-- data-compare-with="confirm77" -->
+			data-compare-to="registerForm.password" >
 			
 
 		</div>
@@ -131,9 +110,7 @@
 		<!-- By signing up, you agree with our Terms of Service. |
 		By clicking on "Create an account" below, you are agreeing to the Terms of Service and the Privacy Policy.
 		I agree to Appliation's Terms of Service and Privacy Policy. -->
-		<button id="siginButton" type="submit" class="btn"
-		data-ng-disabled="registerForm.$invalid || ( registerForm.confirm.$dirty && registerForm.confirm.$valid && !registerForm.confirm.$invalid) && 
-			( registerForm.password.$modelValue != registerForm.confirm.$modelValue )">Create an account</button>
+		<button id="siginButton" type="submit" class="btn" data-ng-disabled="registerForm.$invalid">Create an account</button>
 		
 		<br><br>
 		
