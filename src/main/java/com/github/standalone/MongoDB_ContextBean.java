@@ -1,20 +1,29 @@
 package com.github.standalone;
 
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.core.io.support.ResourcePatternResolver;
 
 import com.github.dao.GridFSDBFileDao;
 import com.github.dao.MongoFilesDAO;
+import com.github.dao.SpringDataMongoDB;
+import com.github.dao.SpringDataMongoDB_Impl;
+import com.github.dto.EmpInfo;
+import com.github.dto.UsersInfo;
+import com.github.dto.EmpInfo.Address;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.gridfs.GridFSDBFile;
@@ -33,75 +42,65 @@ public class MongoDB_ContextBean {
 	public static void main(String[] args) {
 		//mongoOperations();
 		
-		String fileDrive = "E:/", fileName = "capture.jpg", writeToFile = "captureDownload.jpg";
+		SpringDataMongoDB mongo = (SpringDataMongoDB) context.getBean("springDataMongo");
+		
+		UsersInfo usersPojo = new UsersInfo();
+		usersPojo.setUserName("Yash");
+		usersPojo.setEmail("Yashwanth.m@gmail.com");
+		//mongo.insertRecord( usersPojo );
+		//System.out.println("_id : "+usersPojo.get_id());
+		
+		usersPojo.setEmail("Yashwanth777.@gmail.com");
+		//mongo.updateRecord(usersPojo);
+		
+		EmpInfo emp = new EmpInfo();
+		emp.setEmpId(777);
+		emp.setUserName("Yash");
+		
+		Address add = new EmpInfo().new Address();
+		add.setPincode(505174);
+		add.setStreetName("Street1");
+		
+		Address add2 = new EmpInfo().new Address();
+		add2.setPincode(505172);
+		add2.setStreetName("Street2");
+		
+		List<Address> address = new ArrayList<Address>();
+		address.add(add);
+		address.add(add2);
+		
+		emp.setAddress(address);
+		//mongo.insertEmpRecord( emp );
+		System.out.println("_id : "+emp.get_id());
+		
+		emp.set_id( new ObjectId("596f797c986068870e3e4af6") );
+		add.setPincode(505176);
+		mongo.updateEmpRecord( emp );
+	}
+	
+	static void mongoOperations() {
+		//MongoFilesDAO mongo = (MongoFilesDAO) context.getBean("mongoDao");
+		//mongo.insertBSONRecord("Yashwanth", "26");
+		
+		/*GridFSDBFileDao gridFSDBFileDao = (GridFSDBFileDao) context.getBean("mongoGridFSDao");
+		gridFSDBFileDao.insertBSONRecord("Yashwanth", "26");*/
+		
+		//String fileDrive = "E:/", fileName = "capture.jpg", writeToFile = "captureDownload.jpg";
 		//gridOperations( fileDrive, fileName, writeToFile );
 		
-		String[] fileList = {fileName, writeToFile, "Untitled.jpg", "NPMUpdate_PackageJSON.png"};
-		String mongoID = insertManyFilesWithUniqueID(fileDrive, fileList);
-		System.out.println("Final ID : "+ mongoID);
+		//String[] fileList = {fileName, writeToFile, "Untitled.jpg", "NPMUpdate_PackageJSON.png"};
+		/*
+		String mongoID = gridFSDBFileDao.insertManyFilesWithUniqueID(fileDrive, fileList);
+		System.out.println("Final ID : "+ mongoID);*/
+		
+		//readFiles();
+		
+		/*ArrayList<String> data = gridFSDBFileDao.downloadFilesWithUniqueID("596f09b998609441f6c40bf5");
+		System.out.println("Final Data : "+data);*/
+		
+		//deleteFileByGridFsId("596f09b998609441f6c40bf5");
 	}
-	
-	public static void mongoOperations() {
-		MongoFilesDAO mongo = (MongoFilesDAO) context.getBean("mongoDao");
-		mongo.insertBSONRecord("Yashwanth", "26");
-	}
-	
-	public static String insertManyFilesWithUniqueID( String fileDrive, String[] fileList ) {
-		try {
-			GridFSDBFileDao gridFSDBFileDao = (GridFSDBFileDao) context.getBean("mongoGridFSDao");
-			int size = 0;
-			ArrayList<List<String>> fileSet = new ArrayList<List<String>>();
-			while( size < fileList.length ) {
-				String fileName = fileList[size];// get file name and mime type.. 
-						// put it into new object and generate new object which contains all the informatin regarding
-						// all the updated files.
-				ArrayList<String> fileMetaData = new ArrayList<String>();
-				
-				Resource resource = context.getResource("file:"+fileDrive+fileName);
-				// { "filename" : "capture.jpg" , "fileMimeType" : "jpg" , "fileExtension" : "image/jpeg"}
-				DBObject metaData = new BasicDBObject();
-				metaData.put("filename", fileName);
-				
-				String extension = getFileExtension(fileName), contentType = "";
-				// https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Complete_list_of_MIME_types
-				if( extension.equalsIgnoreCase("jpg") || extension.equalsIgnoreCase("jpg") ) {
-					metaData.put("FileExtension", "jpg"); // JPEG Image
-					contentType = "image/jpeg";
-				} else if( extension.equalsIgnoreCase("png") ) {
-					metaData.put("FileExtension", "png"); // Portable Network Graphics
-					contentType = "image/png";
-				}
-				metaData.put("MIME|Internet_MediaType", contentType);
-				
-				String id = gridFSDBFileDao.store(resource.getInputStream(), fileName, contentType, metaData);
-				System.out.println("Find By Id ::"+id);
-				
-				fileMetaData.add(id);
-				fileMetaData.add(fileName);
-				size++;
-				fileSet.add( fileMetaData );
-			}
-			
-			if( !fileSet.isEmpty() ) {
-				String mongoID = gridFSDBFileDao.saveFilesData(fileSet);
-				System.out.println("Final Mongo ID : "+ mongoID);
-				return mongoID;
-			}
-			
-		} catch( Exception e ) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	public static String getFileExtension( String fileName ) {
-		int lastIndexOf = fileName.lastIndexOf(".");
-		System.out.println("Last Index : "+lastIndexOf);
-		String extension = fileName.substring(lastIndexOf+1);
-		System.out.println("Extension : "+extension);
-		return extension;
-	}
-	
+
 	public static void gridOperations( String fileDrive, String fileName, String writeToFile ) {
 		InputStream inputStream = null;
 		try {
@@ -159,25 +158,39 @@ public class MongoDB_ContextBean {
 		}
 	}
 	
-	public String getBase64String( String fileLocation ) {
-		try{
-			File file = new File( fileLocation );
-			DataInputStream dis = new DataInputStream(new FileInputStream(file));
-			byte[] byteArray = new byte[(int) file.length()];
-			
-			try {
-				dis.readFully(byteArray); // now the array contains the image
-			} catch (Exception e) {
-				byteArray = null;
-			} finally {
-				dis.close();
-			}
-			String encodedfile = 
-					new String(org.apache.commons.codec.binary.Base64.encodeBase64( byteArray ), "UTF-8");
-			return encodedfile;
-		} catch(Exception e){
+	public static void readFiles() {
+		try { // https://stackoverflow.com/q/22096983/5081877
+		
+		ApplicationContext context = new ClassPathXmlApplicationContext();
+		Resource resource = context.getResource("file:E:/capture.jpg");
+		System.out.println("RESOURCE FILE-Path URI « "+resource.getURI());
+		// RESOURCE FILE-Path URI « file:E:/capture.jpg
+		
+		// /src/main/resources maven directory contents are placed in the root of your CLASSPATH
+		// CLASS-Path URI « file:/D:/{workspace}/{projectName}/target/classes/mongo.properties
+		ClassLoader WebappClassLoader = Thread.currentThread().getContextClassLoader();
+		Resource resourceClass = context.getResource("classpath:mongo.properties");
+		System.out.println("Class Loader URI « "+WebappClassLoader.getResource("mongo.properties").toURI());
+		System.out.println("RESOURCE CLASS-Path URI « "+resourceClass.getURI());
+		
+		Properties props = new Properties();
+		props.load(WebappClassLoader.getResourceAsStream("mongo.properties"));
+		System.out.println("Properties : "+props);
+		
+		// Class Loader « {projectName}/src/main/resources/mongo.properties
+		
+		// Context - org.springframework.core.io.support.ResourcePatternResolver
+		System.out.println("Context - [classpath*:] « "+ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX);
+		System.out.println("Context - [classpath:] « "+ResourceLoader.CLASSPATH_URL_PREFIX);
+		System.out.println("Context - [&] « "+BeanFactory.FACTORY_BEAN_PREFIX);
+		
+		Resource resourceContext = context.getResource("context:/wiki.txt");
+		System.out.println("RESOURCE Context-Path URI « "+resourceContext.getURI());
+		
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
-		return null;
 	}
 }

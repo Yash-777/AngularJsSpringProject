@@ -1,0 +1,10 @@
+/bin/
+/lib/*.jar
+
+# Eclipse Settings
+.settings/*
+.classpath
+.project
+
+# Maven Classes
+/target/

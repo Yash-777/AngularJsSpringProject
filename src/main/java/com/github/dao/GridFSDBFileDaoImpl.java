@@ -2,18 +2,28 @@ package com.github.dao;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.core.io.Resource;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
+import org.springframework.stereotype.Repository;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.gridfs.GridFSDBFile;
 
+@Repository
 public class GridFSDBFileDaoImpl extends MongoFilesDAO_Impl implements GridFSDBFileDao {
 	
 	@Autowired
@@ -142,5 +152,95 @@ public class GridFSDBFileDaoImpl extends MongoFilesDAO_Impl implements GridFSDBF
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	@Override
+	public String insertManyFilesWithUniqueID(String fileDrive, String[] fileList) {
+		try {
+			int size = 0;
+			ArrayList<List<String>> fileSet = new ArrayList<List<String>>();
+			while( size < fileList.length ) {
+				String fileName = fileList[size];// get file name and mime type.. 
+						// put it into new object and generate new object which contains all the informatin regarding
+						// all the updated files.
+				ArrayList<String> fileMetaData = new ArrayList<String>();
+				
+				ApplicationContext context = new ClassPathXmlApplicationContext();
+				Resource resource = context.getResource("file:"+fileDrive+fileName);
+				System.out.println("RESOURCE FILE-Path URI « "+resource.getURI());
+				// RESOURCE FILE-Path URI « file:E:/capture.jpg
+				// { "filename" : "capture.jpg" , "fileMimeType" : "jpg" , "fileExtension" : "image/jpeg"}
+				DBObject metaData = new BasicDBObject();
+				metaData.put("filename", fileName);
+				
+				String extension = getFileExtension(fileName), contentType = "";
+				// https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Complete_list_of_MIME_types
+				if( extension.equalsIgnoreCase("jpg") || extension.equalsIgnoreCase("jpeg") ) {
+					metaData.put("FileExtension", "jpg"); // JPEG Image
+					contentType = "image/jpeg";
+				} else if( extension.equalsIgnoreCase("png") ) {
+					metaData.put("FileExtension", "png"); // Portable Network Graphics
+					contentType = "image/png";
+				}
+				metaData.put("MIME|Internet_MediaType", contentType);
+				
+				String id = store(resource.getInputStream(), fileName, contentType, metaData);
+				System.out.println("Find By Id ::"+id);
+				
+				fileMetaData.add(id);
+				fileMetaData.add(fileName);
+				size++;
+				fileSet.add( fileMetaData );
+			}
+			
+			if( !fileSet.isEmpty() ) {
+				String mongoID = saveFilesData(fileSet);
+				System.out.println("Final Mongo ID : "+ mongoID);
+				return mongoID;
+			}
+			
+		} catch( Exception e ) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	public String getFileExtension( String fileName ) {
+		int lastIndexOf = fileName.lastIndexOf(".");
+		System.out.println("Last Index : "+lastIndexOf);
+		String extension = fileName.substring(lastIndexOf+1);
+		System.out.println("Extension : "+extension);
+		return extension;
+	}
+	
+	/*
+Final Data : [
+%TEMP%\1500458557745_capture.jpg, %TEMP%\1500458557761_captureDownload.jpg,
+%TEMP%\1500458557761_Untitled.jpg, %TEMP%\1500458558089_NPMUpdate_PackageJSON.png
+]
+	 */
+	@Override
+	public ArrayList<String> downloadFilesWithUniqueID(String _id) {
+		ArrayList<String> fileNames = new ArrayList<String>();
+		
+		String filePath = System.getProperty("java.io.tmpdir")+"/";
+
+		ArrayList<Map<String, String>> filesData = getFilesData(_id);
+		for (Map<String, String> map : filesData) {
+			String fileID = map.get("FileID"), fileName = map.get("FileName");
+			GridFSDBFile outputImageFile = fileRetriveById( fileID );
+			
+			Date date = new Date();
+			long timeInMilliSeconds = date.getTime();
+			System.out.println("Sec : "+timeInMilliSeconds);
+			File file = new File( filePath+timeInMilliSeconds+"_"+fileName );
+			
+			try {
+				outputImageFile.writeTo( file );
+				fileNames.add( file.getAbsolutePath() );
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return fileNames;
 	}
 }

@@ -1,0 +1,80 @@
+http://localhost:8080/AngularSpringProject/account/login.form#/login
+http://localhost:8080/AngularSpringProject/account/login.form#/forgotPassword
+http://localhost:8080/AngularSpringProject/account/login.form#/register
+
+GET... /login
+URL ***** /css/angularLogin.css
+URL ***** /css/confirmPassword.css
+URL ***** /angular/controllers/loginModuleControler.js
+URL ***** /angular/filters/wordCount.js
+URL ***** /angular/directives/confirmPassword.js
+URL ***** /angular/directives/passwordStrength.js
+
+URL ***** /account/userLogin
+POST...  inputFromData
+SB : {"username":"yashwanth.merugu@gmail.com","password":"Yash@123"}
+
+
+http://localhost:8080/AngularSpringProject/account/loginSucess
+
+JavaScript:
+JavaScript is executed on the client side (browser),
+while the session data is stored on the server.
+
+by this you can't modify the servers session data with JavaScript.
+Sessions may contain sensitive data.
+
+using JS you can easily find many examples how to modify cookies.
+
+Browser Session local to client:
+	sessionStorage.setItem("SessionName","SessionData");
+	sessionStorage.SessionName = "SessionData";
+	sessionStorage.getItem("SessionName");
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+	
+	xmlns:util="http://www.springframework.org/schema/util"
+	
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/data/mongo 
+	http://www.springframework.org/schema/data/mongo/spring-mongo-1.5.xsd
+	">
+	
+<!-- mongodb configuration -->
+<!-- <bean id="mongo" class="org.springframework.data.mongodb.core.MongoFactoryBean">
+	<property name="host" value="${mongoDBHost}" />
+	<property name="port" value="${mongoDBPort}"></property>
+</bean> -->
+<mongo:mongo host="${mongoDBHost}" port="${mongoDBPort}" id="mongo" />
+<bean id="mongoCredientials" class="org.springframework.data.authentication.UserCredentials">
+	<constructor-arg name="username" value="${mongoDBUserName}"/>
+	<constructor-arg name="password" value="${mongoDBPassword}"/>
+</bean>
+
+<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+	<constructor-arg name="mongo" ref="mongo" />
+	<constructor-arg name="databaseName" value="${mongoDBName}" />
+	<constructor-arg name="userCredentials" ref="mongoCredientials"/>
+</bean>
+
+	<mongo:db-factory id="mongoDbFactory" 
+	host="${mongoDBHost}" 
+	port="${mongoDBPort}" 
+	dbname="${mongoDBName}" 
+	username="${mongoDBUserName}"
+	password="${mongoDBPassword}"
+	/>
+	<mongo:mapping-converter id="converter" db-factory-ref="mongoDbFactory" />
+	<bean id="gridTemplateImages" class="org.springframework.data.mongodb.gridfs.GridFsTemplate">
+		<constructor-arg name="dbFactory" ref="mongoDbFactory" />
+		<constructor-arg name="converter" ref="converter" />
+		<constructor-arg name="bucket" value="${mongoDB_BucketName}"/>
+	</bean>
+	
+	<bean id="mongoDao" class="com.github.dao.MongoFilesDAO_Impl" scope="singleton">
+		<property name="mongoTemplate" ref="mongoTemplate"/>
+		<property name="gridFsTemplate" ref="gridTemplateImages"/>
+	</bean>

@@ -1,6 +1,7 @@
 package com.github.dao;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.mongodb.DBObject;
@@ -18,4 +19,7 @@ public interface GridFSDBFileDao extends MongoFilesDAO {
 	public List<GridFSDBFile> findAll();
 	
 	public String getBase64ByFileName(String fileName);
+	
+	public String insertManyFilesWithUniqueID( String fileDrive, String[] fileList );
+	public ArrayList<String> downloadFilesWithUniqueID(String _id);
 }

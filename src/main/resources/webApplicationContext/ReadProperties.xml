@@ -1,22 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	
 	xmlns:util="http://www.springframework.org/schema/util"
-	
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
 	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/util
+	http://www.springframework.org/schema/util/spring-util-3.0.xsd
 	">
 	
-	<!-- http://www.springframework.org/schema/util
-	http://www.springframework.org/schema/util/spring-util-3.0.xsd -->
+	<!-- <context:property-placeholder location="classpath:db.properties,app.properties" /> -->
 	
+	<!-- Spring 3.0 XSD Configuration « 
+	http://docs.spring.io/spring/docs/1.2.x/reference/beans.html
+	http://docs.spring.io/spring/docs/3.0.x/javadoc-api/org/springframework/beans/factory/config/PropertyPlaceholderConfigurer.html -->
 	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
-			<list>
+			<list value-type="org.springframework.core.io.Resource">
 				<value>classpath:config.properties</value>
 			</list>
 		</property>
+		<property name="ignoreResourceNotFound" value="true"/>
 	</bean>
 
 </beans>

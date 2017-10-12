@@ -2,9 +2,13 @@ package com.github.dao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.collections.map.HashedMap;
 import org.bson.types.ObjectId;
 import org.json.JSONException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -29,15 +33,8 @@ public class MongoFilesDAO_Impl implements MongoFilesDAO {
 		this.collectionName = collectionName;
 	}
 
-	//@Autowired @Qualifier(value="mongoTemplate")
+	@Autowired @Qualifier(value="mongoTemplate")
 	private MongoTemplate mongoTemplate;
-	public MongoTemplate getMongoTemplate() {
-		return mongoTemplate;
-	}
-	public void setMongoTemplate(MongoTemplate mongoTemplate) {
-		System.out.println("Mongo Template : "+mongoTemplate);
-		this.mongoTemplate = mongoTemplate;
-	}
 	
 	@Override
 	public void insertBSONRecord(String name, String age) {
@@ -65,6 +62,14 @@ public class MongoFilesDAO_Impl implements MongoFilesDAO {
 		}
 	}
 	
+	/*
+[ 
+  { "FileID" : "596f09b998609441f6c40bec" , "FileName" : "capture.jpg"},
+  { "FileID" : "596f09b998609441f6c40bee" , "FileName" : "captureDownload.jpg"},
+  { "FileID" : "596f09b998609441f6c40bf0" , "FileName" : "Untitled.jpg"},
+  { "FileID" : "596f09b998609441f6c40bf3" , "FileName" : "NPMUpdate_PackageJSON.png"}
+]
+	 */
 	@Override
 	public String saveFilesData( ArrayList<List<String>> fileSet ) {
 		try {
@@ -83,6 +88,54 @@ public class MongoFilesDAO_Impl implements MongoFilesDAO {
 		}
 		return null;
 	}
+	@Override
+	public ArrayList<Map<String,String>> getFilesData(String _id) {
+		
+		try {
+			DBCollection table = mongoTemplate.getCollection( collectionName );
+			BasicDBObject document = new BasicDBObject(CollectionKey.ID,new ObjectId( _id ));
+			
+			DBCursor cursor = table.find(document);
+			if ( cursor.hasNext() ){
+				DBObject next = cursor.next();
+				BasicDBList dblist = (BasicDBList) next.get("linkedFileIDS");
+				System.out.println("JSON Data : \n"+dblist);
+				return jsonTo_ArrayList(dblist);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	@Override
+	public boolean updateFilesData(String _id, String fileName, String update_id) {
+		try {
+			DBCollection table = mongoTemplate.getCollection( collectionName );
+			BasicDBObject document = new BasicDBObject(CollectionKey.ID,new ObjectId( _id ));
+			DBCursor cursor = table.find(document);
+			if ( cursor.hasNext() ){
+				DBObject next = cursor.next();
+				BasicDBList dblist = (BasicDBList) next.get("linkedFileIDS");
+				System.out.println("JSON Data : \n"+dblist);
+				
+				for (int index = 0; index < dblist.size(); index++) {
+					BasicDBObject map = (BasicDBObject) dblist.get(index);
+					String file_Name = (String) map.get("FileName");
+					if ( file_Name.equalsIgnoreCase(fileName) ) {
+						/*BasicDBList updatedList = new BasicDBList( dblist );
+						table.update(dblist, dblist.get(index))*/
+						return true;
+					}
+				}
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
 	
 	public BasicDBList AL2Jaon_Format(ArrayList<List<String>> fileSet) throws JSONException{
 		BasicDBList finalArray = new BasicDBList();
@@ -95,5 +148,19 @@ public class MongoFilesDAO_Impl implements MongoFilesDAO {
 		}
 		System.out.println("JSON Array : \n"+finalArray);
 		return finalArray;
+	}
+	@SuppressWarnings("unchecked")
+	public static ArrayList<Map<String,String>> jsonTo_ArrayList( BasicDBList dblist ) {
+		ArrayList<Map<String,String>> fileData = new ArrayList<Map<String,String>>();
+		
+		for (Object objString : dblist) {
+			HashedMap fileinfo = new HashedMap();
+			BasicDBObject object = (BasicDBObject) objString;
+			fileinfo.put("FileID", object.get("FileID"));
+			fileinfo.put("FileName", object.get("FileName"));
+			System.out.println("File Info : "+fileinfo);
+			fileData.add(fileinfo);
+		}
+		return fileData;
 	}
 }

@@ -42,13 +42,15 @@
 
 	<bean id="mongoDao" class="com.github.dao.MongoFilesDAO_Impl">
 		<property name="collectionName" value="${mongoDB_Collection}"/>
-		<property name="mongoTemplate" ref="mongoTemplate"/>
+		<!-- Used @Autowore <property name="mongoTemplate" ref="mongoTemplate"/> -->
 	</bean>
 	<bean id="mongoGridFSDao" class="com.github.dao.GridFSDBFileDaoImpl" parent="mongoDao">
 		<!-- Used @Autowore <property name="gridFsTemplate" ref="gridFsTemplate"/> -->
 	</bean>
 	
+	<bean id="springDataMongo" class="com.github.dao.SpringDataMongoDB_Impl">
+	</bean>
+	
 	<bean class="org.springframework.data.mongodb.core.MongoExceptionTranslator"/>
-
 
 </beans>

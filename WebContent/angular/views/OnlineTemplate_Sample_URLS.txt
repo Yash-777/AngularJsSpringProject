@@ -1,0 +1,5 @@
+Templates:
+	https://wrapbootstrap.com/?ref=StartBootstrap
+		http://coderthemes.com/minton/dark_light/index.html
+Graphs:
+	http://morrisjs.github.io/morris.js/

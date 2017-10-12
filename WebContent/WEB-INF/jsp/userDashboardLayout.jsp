@@ -33,6 +33,16 @@
  <div class="container-fluid">
    <div class="row">
      <div class="col-md-10 col-xs-12">
+     <!-- It's good practice to use either the spring:url tag or the JSTL c:url tag to wrap URLs -->
+     <%-- https://stackoverflow.com/a/2206865/5081877
+ taglib xmlns:spring="http://www.springframework.org/tags"
+ xmlns:c="http://java.sun.com/jsp/jstl/core"
+<img src="<spring:url value='/images/logo.png'/>"/>
+<spring:url value="/testsuccess" var="myurl" htmlEscape="true"/>
+<a href="${myurl}">...</a>
+
+     <c:url value='/testsuccess'/>
+     <img src="<%=request.getContextPath()%>/images/logo.png"/> --%>
     <img src="${pageContext.servletContext.contextPath}/images/logo.png">
     <div style="width: 130px;">
     <!-- https://www.w3schools.com/js/js_timing.asp
