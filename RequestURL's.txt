@@ -1,3 +1,7 @@
+https://g00glen00b.be/spring-angular-sockjs/
+http://beyondscheme.com/2016/angular2-discussion-portal
+https://examples.javacodegeeks.com/core-java/real-time-applications-angularjs-java-part-3/
+
 http://localhost:8080/AngularSpringProject/account/login.form#/login
 http://localhost:8080/AngularSpringProject/account/login.form#/forgotPassword
 http://localhost:8080/AngularSpringProject/account/login.form#/register

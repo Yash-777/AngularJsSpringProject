@@ -13,18 +13,41 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd
 http://www.springframework.org/schema/mvc
 http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
 ">
-	<!-- Activates various annotations to be detected in bean classes -->
-	<context:annotation-config/>
+<!-- 
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	
+	<annotation-driven /> // default is MVC, so use <beans:beans
+
+<beans  xmlns="http://www.springframework.org/schema/beans"
+	// here default is beans.
+-->	
 	<!-- Scans the class-path for annotated components that will be auto-registered as Spring beans.
 	For example @Controller and @Service. Make sure to set the correct base-package-->
 	<context:component-scan base-package="com.github.controllers,com.github.service,
 	com.github.dto,com.github.dao" />
+	<!-- Activates various annotations to be detected in bean classes: Spring's @Required and @Autowired -->
+	<context:annotation-config/>
 
-<!--
+<!-- java:org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter
 Enable annotation driven controllers, validation etc... Configures the annotation-driven Spring MVC Controller programming model.
-Note that, with Spring 3.0, this tag works in SERVLET MVC only!
-http://stackoverflow.com/a/14326400/5081877 - cache-period="31556926"-->
+Note that, with Spring 3.0, this tag works in SERVLET MVC only! -->
 	<mvc:annotation-driven />
+<!-- java:org.springframework.web.servlet.resource.ResourceHttpRequestHandler
+Configures a handler for serving static resources such as images, js, and, css files with cache headers optimized 
+for efficient loading in a web browser. Allows resources to be served out of any path that is reachable via Spring's Resource handling.
+Attributes
+mapping « The URL mapping pattern, within the current Servlet context,
+to use for serving resources from this handler, such as "/resources/**"
+location « The resource location from which to serve static content, specified at a Spring Resource pattern.
+Each location must point to a valid directory. Multiple locations may be specified as a comma-separated list,
+and the locations will be checked for a given resource in the order specified.
+For example, a value of "/, classpath:/META-INF/public-web-resources/"
+
+URL: localhost:8080/Project/staticFiles/path/file.js « static resources in the ${webappRoot}/resources directory.
+Example: <mvc:resources mapping="/staticFiles/path/**" location="/staticFilesFolder/js/" cache-period="60"/>
+ -->
 	<mvc:resources mapping="/js/**" location="/js/"/>
 	<mvc:resources mapping="/css/**" location="/css/"/>
 	<mvc:resources mapping="/angular/**" location="/angular/"/>
@@ -33,6 +56,7 @@ http://stackoverflow.com/a/14326400/5081877 - cache-period="31556926"-->
 	<!-- <mvc:interceptors>
 		<bean class="com.github.controllers.TimeInterceptor" />
 		<mvc:interceptor>
+			// Registers an interceptor that interceptors requests sent to one or more URI paths.
 			<mvc:mapping path="/" />
 			<bean class="com.github.controllers.TimeInterceptor" />
 		</mvc:interceptor>

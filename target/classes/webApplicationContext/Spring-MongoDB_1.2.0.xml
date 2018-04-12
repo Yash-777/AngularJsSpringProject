@@ -11,7 +11,9 @@
 	http://www.springframework.org/schema/data/mongo 
 	http://www.springframework.org/schema/data/mongo/spring-mongo-1.5.xsd
 	">
-	<!-- Spring data mongodb « 1.2.0.RELEASE [ mongo-java-driver « 2.11.0 ]-->
+	<!-- Spring data mongodb « 1.2.0.RELEASE [ mongo-java-driver « 2.11.0 ]
+	Activates various annotations to be detected in bean classes: Spring's @Required and @Autowired
+	-->
 	<context:annotation-config />
 
 	<import resource="ReadProperties.xml" />
@@ -42,13 +44,15 @@
 
 	<bean id="mongoDao" class="com.github.dao.MongoFilesDAO_Impl">
 		<property name="collectionName" value="${mongoDB_Collection}"/>
-		<property name="mongoTemplate" ref="mongoTemplate"/>
+		<!-- Used @Autowore <property name="mongoTemplate" ref="mongoTemplate"/> -->
 	</bean>
 	<bean id="mongoGridFSDao" class="com.github.dao.GridFSDBFileDaoImpl" parent="mongoDao">
 		<!-- Used @Autowore <property name="gridFsTemplate" ref="gridFsTemplate"/> -->
 	</bean>
 	
+	<bean id="springDataMongo" class="com.github.dao.SpringDataMongoDB_Impl">
+	</bean>
+	
 	<bean class="org.springframework.data.mongodb.core.MongoExceptionTranslator"/>
-
 
 </beans>

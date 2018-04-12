@@ -9,7 +9,10 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 
 /**
+ * https://avaldes.com/wp-content/uploads/2015/05/spring_interceptor.png?2d262d&2d262d
+ * https://avaldes.com/spring-mvc-interceptor-using-handlerinterceptoradapter-example/
  * http://www.journaldev.com/2676/spring-mvc-interceptor-example-handlerinterceptor-handlerinterceptoradapter
+ * 
  * @author yashwanth.m
  *
  */
