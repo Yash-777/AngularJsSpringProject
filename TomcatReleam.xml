@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Server port="9005" shutdown="SHUTDOWN">
+<Realm className="org.apache.catalina.realm.LockOutRealm">
+  <Realm className="org.apache.catalina.realm.UserDatabaseRealm" resourceName="UserDatabase"/>
+</Realm>
+
+ <Host name="localhost"  appBase="webapps" unpackWARs="true" autoDeploy="true">
+
+	<Realm className="org.apache.catalina.realm.JDBCRealm"
+	driverName="com.mysql.jdbc.Driver"
+	connectionURL="jdbc:mysql://HOST-IP:3306/DB NAME"
+	connectionName="USER NAME" 
+	connectionPassword="PASSWORD"
+	userNameCol="DISPLAY_NAME" 
+	userCredCol="USER_UNIQUE_ID"
+	userTable="userinfo"
+	roleNameCol="rolename" 
+	userRoleTable="user_roles"
+	/>
+  <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"
+           prefix="localhost_access_log." suffix=".txt"
+           pattern="%h %l %u %t &quot;%r&quot; %s %b" />
+ </Host>
+</Server>

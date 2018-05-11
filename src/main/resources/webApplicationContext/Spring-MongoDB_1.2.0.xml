@@ -11,7 +11,9 @@
 	http://www.springframework.org/schema/data/mongo 
 	http://www.springframework.org/schema/data/mongo/spring-mongo-1.5.xsd
 	">
-	<!-- Spring data mongodb « 1.2.0.RELEASE [ mongo-java-driver « 2.11.0 ]-->
+	<!-- Spring data mongodb « 1.2.0.RELEASE [ mongo-java-driver « 2.11.0 ]
+	Activates various annotations to be detected in bean classes: Spring's @Required and @Autowired
+	-->
 	<context:annotation-config />
 
 	<import resource="ReadProperties.xml" />

@@ -1,7 +1,15 @@
 /*passwordStrength.js*/
 var strength = angular.module('loginModule');
+var resetPassword = angular.module('resetModule');
+var changePassword = angular.module('userModule');
 
-strength.factory('myfactory', [function() {
+strength.factory('myfactory', [ myFactoryFun ])
+        .directive('okPasswordDirective', ['myfactory', 'USERCONSTANTS', okPasswordFun]);
+/*
+resetPassword.factory('myfactory', [ myFactoryFun ])
+             .directive('okPasswordDirective', ['myfactory', 'USERCONSTANTS', okPasswordFun]);
+*/
+function myFactoryFun() {
 	return {
 		score: function() {
 			//console.log('arguments List : ', arguments);
@@ -29,9 +37,8 @@ strength.factory('myfactory', [function() {
 			return score;
 		}
 	};
-}])
-
-.directive('okPasswordDirective', ['myfactory', 'USERCONSTANTS', function(myfactory, USERCONSTANTS) {
+}
+function okPasswordFun(myfactory, USERCONSTANTS) {
 	return {
 		// restrict to only attribute and class [AC]
 		restrict: 'AC',
@@ -63,4 +70,4 @@ strength.factory('myfactory', [function() {
 			});
 		}
 	};
-}]);
+}

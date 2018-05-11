@@ -45,6 +45,7 @@
 		//You need to supply a scope while instantiating. Provide the scope, you can also do 
 		//$scope.$new(true) in order to create an isolated scope.
 		//In this case it is the child scope of this scope.
+		// https://github.com/angular/angular.js/wiki/Understanding-Dependency-Injection
 		$controller('loadScript',{$scope : testCtrl1ViewModel });
 		testCtrl1ViewModel.loadScript(USERCONSTANTS.USERS_DOMAIN+'/js/custom.js');
 		
