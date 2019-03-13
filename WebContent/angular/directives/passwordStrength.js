@@ -1,7 +1,7 @@
 /*passwordStrength.js*/
 var strength = angular.module('loginModule');
-var resetPassword = angular.module('resetModule');
-var changePassword = angular.module('userModule');
+/*var resetPassword = angular.module('resetModule');
+var changePassword = angular.module('userModule');*/
 
 strength.factory('myfactory', [ myFactoryFun ])
         .directive('okPasswordDirective', ['myfactory', 'USERCONSTANTS', okPasswordFun]);

@@ -44,6 +44,14 @@ public class LoginCheckController {
 		return mav;
 	}
 	
+	@RequestMapping(value = "/signin", method = RequestMethod.GET )
+	public ModelAndView inputFrom2( Model model ) {
+		System.out.println("GET... /login");
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("signinRoute"); //signinRoute | signin
+		return mav;
+	}
+	
 	@RequestMapping(value = "/logout", method = RequestMethod.GET )
 	public String signOUT( Model model, HttpServletRequest req, HttpServletResponse resp ) {
 		System.out.println("GET... /logout");

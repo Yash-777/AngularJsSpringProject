@@ -1,5 +1,6 @@
 package com.github.dao;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -15,4 +16,7 @@ public interface MongoFilesDAO {
 	public String saveFilesData( ArrayList<List<String>> fileSet );
 	public ArrayList<Map<String,String>> getFilesData(String _id);
 	public boolean updateFilesData(String _id, String fileName, String update_id);
+	
+	public InputStream getImageStream( String fileObjectID );
+	public InputStream getVideoStream( String fileID );
 }

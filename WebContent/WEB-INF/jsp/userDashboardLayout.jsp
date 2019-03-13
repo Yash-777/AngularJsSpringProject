@@ -24,6 +24,45 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="${pageContext.servletContext.contextPath}/js/custom.js"></script>
+
+<script type="text/javascript">
+/* You can make the dependency of the "user directives" to the page Model. */
+var userRouteProvider = angular.module('userModule', ['ui.bootstrap', 'ngRoute']);
+userRouteProvider.constant('USERDETAILS', (function() {
+	var resorceFullPath = '${pageContext.request.getScheme()}://${pageContext.request.getServerName()}:${pageContext.request.getServerPort()}'+
+	'${pageContext.request.getContextPath()}';
+	console.log('resorceFullPath : ',resorceFullPath);
+	console.log('USERS_NAME : ', '${sessionScope.userName}');
+	console.log('EMAIL_ID : ', '${sessionScope.email}');
+	console.log('PASSWORD : ', '${sessionScope.password}');
+	// Use the variable in your constants
+	return {
+		USERS_DOMAIN: resorceFullPath,
+		USER_NAME: '${sessionScope.userName}',
+		EMAIL_ID: '${sessionScope.email}',
+		PASSWORD: '${sessionScope.password}',
+		PASSWORD_LENGTH: 7
+	}
+})());
+userRouteProvider.config( function($routeProvider) {
+
+	$routeProvider
+	.when('/dashboard', {
+		templateUrl : '${pageContext.servletContext.contextPath}/angular/views/dashboard.html',
+		controller  : 'dashboardController'
+	})
+	/* .when('/Scenarioreports/ScenarioName/:ScenarioName/id/:ScenarioSessionID', {
+	templateUrl : '${pageContext.servletContext.contextPath}/angular/views/scenarioReports.html',
+	controller  : 'ScenarioreportsController'
+	}) */
+	.when('/support', {
+	templateUrl : '${pageContext.servletContext.contextPath}/angular/views/support.html',
+	controller  : 'supportController'
+	})
+	.otherwise({ redirectTo: '/dashboard' });
+});
+</script>
+
 </head>
 <body>
 <header class="white-bg">
@@ -43,7 +82,7 @@
 
      <c:url value='/testsuccess'/>
      <img src="<%=request.getContextPath()%>/images/logo.png"/> --%>
-    <img src="${pageContext.servletContext.contextPath}/images/logo.png">
+    <img style="height: 60px;" src="${pageContext.servletContext.contextPath}/images/chrome-logo_2x.png">
     <div style="width: 130px;">
     <!-- https://www.w3schools.com/js/js_timing.asp
     This example executes a function called "myTimer" once every second (like a digital watch). -->

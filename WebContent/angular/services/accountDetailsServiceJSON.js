@@ -23,12 +23,55 @@ you declare dependencies by specifying them in the service's factory function si
 	/*userJSONServiceFun.$inject = ['$rootScope'];*/
 	
 	function userJSONServiceFun() {
-		var jsonData = {
+		/*var jsonData = {
 			userName:"Yash77",
 			userEmail:"Yashwanth.merugu@gmail.com",
 			designation:"Tester"
 		};
 		
-		return jsonData;
+		return jsonData;*/
+		
+		
+		function serverReq( callback ) {
+			
+			var targetRequestPath = '../user/getAllScenarioDetailsOfUser';
+			var targetRequestParamsREQ = { 'email': USERDETAILS.EMAIL_ID };
+			$http({
+				method: 'POST',
+				url: targetRequestPath,
+				headers: {'Content-Type': 'application/json'},
+				data: targetRequestParamsREQ
+			/*}).then(function (response) {
+				console.log('Response Data : ', response.data);
+				callback( response.data );
+			})*/
+			}).success( function(data) {
+				console.log('Response Data : ', data);
+				callback( response.data );
+				if( data == 'valid' ) {
+					console.log("Authentication Status : Pass « ");
+				} else {
+					console.log("Authentication Status : Fail « DB Problem");
+				}
+			}).error(function(data){
+				console.log('Error message. ', data);
+				callback( response.data );
+			});
+		}
+		function pojoData() {
+			
+			var manageLinkData = [
+				["Yash","26"],
+				["Sam","25"]
+			];
+			return manageLinkData;
+		}
+		
+		return {
+			pojoData : pojoData,
+			serverReq : serverReq
+		};
 	}
+	
+	
 })();

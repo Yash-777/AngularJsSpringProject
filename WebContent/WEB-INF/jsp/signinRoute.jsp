@@ -20,9 +20,27 @@
 <script type="text/javascript">
 $('#error').hide();
 $('#resentPassword').hide();
-var loginRouteProvider = angular.module('loginModule', ['ngRoute']).config( function($routeProvider) {
+var loginRouteProvider = angular.module('loginModule', ['ngRoute']);
+// Error: [$injector:unpr] http://errors.angularjs.org/1.5.9/$injector/
+loginRouteProvider.constant('USERCONSTANTS', (function() {
+	// Define your variable
+	var resourceName = '${pageContext.request.contextPath}';
+	var resorceFullPath = '${pageContext.request.getScheme()}://${pageContext.request.getServerName()}:${pageContext.request.getServerPort()}'+
+	'${pageContext.request.getContextPath()}';
+	console.log('resourceName : ', resourceName);
+	console.log('resorceFullPath : ',resorceFullPath);
+	console.log('getLocalAddr : ', '${pageContext.request.getLocalAddr()}');
+	console.log('getRequestURL : ', '${pageContext.request.getRequestURL()}');
+	// Use the variable in your constants
+	return {
+		USERS_DOMAIN: resorceFullPath,
+		USERS_API: resorceFullPath + '/users',
+		BASIC_INFO: resorceFullPath + '/api/info',
+		PASSWORD_LENGTH: 7
+	}
+})());
+loginRouteProvider.config( function($routeProvider, $provide) {
 	$routeProvider
-
 	// route for the home page
 	.when('/login', {
 	templateUrl : '${pageContext.servletContext.contextPath}/angular/views/login.html',
@@ -41,6 +59,25 @@ var loginRouteProvider = angular.module('loginModule', ['ngRoute']).config( func
 	controller  : 'registerController'
 	})
 	.otherwise({ redirectTo: '/login' });
+	
+	// https://github.com/angular/angular.js/pull/3760#issuecomment-130343142
+	// monkey-patches $templateCache to have a keys() method
+	$provide.decorator('$templateCache', ['$delegate', function($delegate) {
+			var keys = [], origPut = $delegate.put;
+				$delegate.put = function(key, value) {
+				origPut(key, value);
+				keys.push(key);
+			};
+			// we would need cache.peek() to get all keys from $templateCache, but this features was never
+			// integrated into Angular: https://github.com/angular/angular.js/pull/3760
+			// please note: this is not feature complete, removing templates is NOT considered
+			$delegate.getKeys = function() {
+				return keys;
+			};
+			console.log('$templateCache keys : ', keys);
+			return $delegate;
+		}
+	]);
 });
 </script>
 	<script src="${pageContext.servletContext.contextPath}/angular/controllers/loginModuleControler.js"></script>

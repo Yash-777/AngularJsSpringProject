@@ -35,7 +35,7 @@
 		<init-param>
 			<param-name>avoid-urls</param-name>
 			<param-value>
-				/account/login,/account/register,/account/forgot
+				/account/login,/account/signin,/account/logout,/account/register,/account/forgot
 				,/account/userLogin,/user/getMailData
 			</param-value>
 		</init-param>

@@ -17,6 +17,8 @@
 		<property name="locations">
 			<list value-type="org.springframework.core.io.Resource">
 				<value>classpath:config.properties</value>
+				<value>classpath:mongo.properties</value>
+				<value>classpath:mail.properties</value>
 			</list>
 		</property>
 		<property name="ignoreResourceNotFound" value="true"/>

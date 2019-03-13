@@ -1,5 +1,6 @@
 package com.github.dao;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,9 @@ import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.mongodb.BasicDBList;
@@ -17,6 +21,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
+import com.mongodb.gridfs.GridFSDBFile;
 
 @Repository
 public class MongoFilesDAO_Impl implements MongoFilesDAO {
@@ -32,9 +37,13 @@ public class MongoFilesDAO_Impl implements MongoFilesDAO {
 	public void setCollectionName(String collectionName) {
 		this.collectionName = collectionName;
 	}
-
+	
 	@Autowired @Qualifier(value="mongoTemplate")
 	private MongoTemplate mongoTemplate;
+	@Autowired @Qualifier(value="gridFsTemplate")
+	private GridFsTemplate gridFsTemplate;
+	@Autowired @Qualifier(value="gridFsTemplate_Video")
+	private	GridFsTemplate	gridFsVideoTemplate;
 	
 	@Override
 	public void insertBSONRecord(String name, String age) {
@@ -162,5 +171,34 @@ public class MongoFilesDAO_Impl implements MongoFilesDAO {
 			fileData.add(fileinfo);
 		}
 		return fileData;
+	}
+	
+	@Override
+	public InputStream getImageStream(String fileObjectID) {
+		Query query = new Query();
+		
+		ObjectId objectId = new ObjectId( fileObjectID );
+		System.out.println("objectId" +objectId);
+		
+		query.addCriteria( Criteria.where("_id").is(objectId) );
+		
+		GridFSDBFile file = gridFsTemplate.findOne(query);
+		System.out.println("file ::: "+file );
+		InputStream inputStream = file.getInputStream();
+		System.out.println("inputStream "+inputStream);
+		return inputStream;
+	}
+	
+	@Override
+	public InputStream getVideoStream(String fileID) {
+		Query query = new Query();
+		
+		query.addCriteria( Criteria.where("_id").is( fileID ) );
+		
+		GridFSDBFile file = gridFsVideoTemplate.findOne(query);
+		System.out.println("file ::: "+file );
+		InputStream inputStream = file.getInputStream();
+		System.out.println("inputStream "+inputStream);
+		return inputStream;
 	}
 }

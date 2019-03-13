@@ -41,6 +41,11 @@
 		<constructor-arg name="converter" ref="mappingConverter"/>
 		<constructor-arg name="bucket" value="${mongoDB_BucketName}"/>
 	</bean>
+	<bean id="gridFsTemplate_Video" class="org.springframework.data.mongodb.gridfs.GridFsTemplate">
+		<constructor-arg name="dbFactory" ref="mongoDbFactory"/>
+		<constructor-arg name="converter" ref="mappingConverter"/>
+		<constructor-arg name="bucket" value="${mongoDB_BucketName_Videos}"/>
+	</bean>
 
 	<bean id="mongoDao" class="com.github.dao.MongoFilesDAO_Impl">
 		<property name="collectionName" value="${mongoDB_Collection}"/>

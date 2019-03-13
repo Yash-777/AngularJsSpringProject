@@ -61,7 +61,7 @@ loginRouteProvider.config( function($routeProvider) {
 	<script src="${pageContext.servletContext.contextPath}/angular/filters/wordCount.js"></script>
 	<script src="${pageContext.servletContext.contextPath}/angular/directives/passwordStrength.js"></script>
 	<script src="${pageContext.servletContext.contextPath}/angular/directives/confirmPassword.js"></script>
-	<script src="${pageContext.servletContext.contextPath}/angular/services/loginService.js"></script>
+	<%-- <script src="${pageContext.servletContext.contextPath}/angular/services/loginService.js"></script> --%>
 	
 <script type="text/javascript">
 var loginModule = angular.module('loginModule');

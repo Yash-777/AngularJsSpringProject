@@ -24,10 +24,10 @@ http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
 	// here default is beans.
 -->	
 	<!-- Scans the class-path for annotated components that will be auto-registered as Spring beans.
-	For example @Controller and @Service. Make sure to set the correct base-package-->
+	For example @Controller,@Repository,@Component and @Service. Make sure to set the correct base-package-->
 	<context:component-scan base-package="com.github.controllers,com.github.service,
 	com.github.dto,com.github.dao" />
-	<!-- Activates various annotations to be detected in bean classes: Spring's @Required and @Autowired -->
+	<!-- Activates various annotations to be detected in bean classes: Spring's @Required,@Resource,@Inject and @Autowired -->
 	<context:annotation-config/>
 
 <!-- java:org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter
@@ -67,38 +67,4 @@ Example: <mvc:resources mapping="/staticFiles/path/**" location="/staticFilesFol
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" 
 	p:prefix="/WEB-INF/jsp/" p:suffix=".jsp" />
 
-	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="locations">
-			<list>
-				<value>classpath:mail.properties</value>
-			</list>
-		</property>
-	</bean>
-	
-	<!--Mail Service -->
-	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-		<property name="host" value="${mail.host}"></property>
-		<property name="port" value="${mail.port}"></property>
-		<property name="username" value="${mail.username}"></property>
-		<property name="password" value="${mail.password}"></property>
-		<property name="javaMailProperties">
-			<props>
-				<prop key="mail.transport.protocol">${mail.transport.protocol}</prop>
-				<prop key="mail.smtp.auth">${mail.smtp.auth}</prop>
-				<prop key="mail.smtp.starttls.enable">${mail.smtp.starttls.enable}</prop>
-				<prop key="mail.smtp.debug">${mail.debug}</prop>
-				<prop key="mail.smtp.socketFactory.port">${mail.smtp.socketFactory.port}</prop>
-				<prop key="mail.smtp.socketFactory.class">${mail.smtp.socketFactory.class}</prop>
-				<prop key="mail.smtp.socketFactory.fallback">${mail.smtp.socketFactory.fallback}</prop>
-			</props>
-		</property>
-	</bean>
-	<bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
-		<property name="velocityProperties">
-		<value>
-		resource.loader=class
-		class.resource.loader.class=org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-		</value>
-		</property>
-	</bean>
 </beans>
