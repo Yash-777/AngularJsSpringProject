@@ -101,7 +101,7 @@ jstl-1.1.jar -> <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
 <dependency>
     <groupId>org.hibernate</groupId>
     <artifactId>hibernate-validator</artifactId>
-    <version>4.2.0.Final</version>
+    <version>5.3.5.Final</version>
 </dependency>
 <dependency>
 		<groupId>javassist</groupId>
