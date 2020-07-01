@@ -64,7 +64,7 @@ jstl-1.1.jar -> <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
 	<dependency>
 		<groupId>mysql</groupId>
 		<artifactId>mysql-connector-java</artifactId>
-		<version>5.1.6</version>
+		<version>8.0.16</version>
 	</dependency>
 
 <!-- BasicDataSource: https://mvnrepository.com/artifact/commons-dbcp/commons-dbcp -->
