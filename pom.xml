@@ -96,7 +96,7 @@ jstl-1.1.jar -> <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
 <dependency>
 	<groupId>org.hibernate</groupId>
 	<artifactId>hibernate-core</artifactId>
-	<version>3.6.10.Final</version>
+	<version>5.4.24.Final</version>
 </dependency>
 <dependency>
     <groupId>org.hibernate</groupId>
